@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static Scanner in = new Scanner(System.in);
 
+
     public static void main(String[] args) {
         System.out.println("1. Sign up");
         System.out.println("2. Login");
@@ -35,6 +36,7 @@ public class Main {
         else if(choice == 3){
             System.exit(0);
         }
+
 
     }
 }
