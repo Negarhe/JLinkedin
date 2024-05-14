@@ -8,6 +8,8 @@ public class Main {
         System.out.println("2. Login");
         System.out.println("3. exit");
 
+        Clients clients = new Clients();
+
         int choice = in.nextInt();
         in.nextLine();
         String command = in.nextLine();
@@ -15,6 +17,7 @@ public class Main {
         if (choice == 1) {
             System.out.println("Enter your email: ");
             String email = in.nextLine();
+
             if(email.contains("@") && email.contains(".")){
                 System.out.println("Enter your name: ");
                 String name = in.nextLine();
@@ -22,7 +25,23 @@ public class Main {
                 String lastName = in.nextLine();
                 System.out.println("Enter your password: ");
                 String password = in.nextLine();
+                //check if the password is strong enough
+                if (checkPass(password)) {
+                    System.out.println("Enter your password again: ");
+                    String password2 = in.nextLine();
+                    if (password.equals(password2)) {
+                        User user = new User(email, name, lastName, password);
+                        clients.addUser(user);
+                    } else {
+                        System.out.println("Passwords do not match");
+                    }
+                }
+
+                //if password wasn't strong enough
+                else
+                    System.out.println("please choose a stronger password");
             }
+
             else{
                 System.out.println("Invalid email");
             }
@@ -36,5 +55,17 @@ public class Main {
             System.exit(0);
         }
 
+    }
+
+    private static boolean checkPass(String password) {
+        boolean allNumbers = true;
+        for (int i = 0; i < password.length(); i++) {
+            if (!Character.isDigit(password.charAt(i))) {
+                allNumbers = false;
+                break;
+            }
+        }
+
+        return !allNumbers && password.length() >= 8;
     }
 }
