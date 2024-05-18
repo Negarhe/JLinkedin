@@ -1,4 +1,4 @@
-public class callInformation {
+public class ContactInformation {
     private String email;
     private String phoneNumber;
     private String kind;//home, job or mobile

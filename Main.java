@@ -48,6 +48,8 @@ public class Main {
         }
 
         else if(choice == 2){
+            displayMenu();
+
 
         }
 
@@ -67,5 +69,13 @@ public class Main {
         }
 
         return !allNumbers && password.length() >= 8;
+    }
+
+    //just a simple menu once the user logged in
+    private static void displayMenu() {
+        System.out.println("1- view your profile");
+        System.out.println("2- create a post");
+        System.out.println("3- search for a user");
+        System.out.println("4- show the feed");
     }
 }

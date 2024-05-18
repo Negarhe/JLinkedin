@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class User {
+public class User { //sections of user introduction:
 
     private String title ; //220 character, a brief overview
     private String email ; //need to check validity
@@ -11,18 +11,28 @@ public class User {
     private String city ; //60 character
     private String country ; //60 character
     //two fields for profile photo and background photo
-
     private String profession ; //60 character, for example "software engineering"
     private String status ; //seeking job? hiring? providing services?
-
     private ArrayList<Job> experiences ; //from the oldest to the latest
     private ArrayList<Education> educations ; //from the oldest to the latest
+    private ContactInformation contactInformation ;
+
+    //user's followngs and connections
+    private ArrayList<User> followings ;
+    private ArrayList<User> connections ;
+
+    //user's activities (creating posts, liking and commenting, declaring job position)
+    private ArrayList<Post> userPosts ;
+    private ArrayList<Like> likedPosts;
+    private ArrayList<Comment> commentedPosts;
+    private ArrayList<Post> userFeed;
+
 
 
     /**
     constructor = sign up method
     constructing a user only consists of getting email, name, last name and password and adding the user to server's list
-    other fields should be completed later.
+    other fields should be completed later, NULL by default.
      **/
 
     public user(email, name, lastName, password ){

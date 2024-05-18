@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.lang.String;
 
 public class Clients {
     private ArrayList<User> users;
@@ -25,4 +26,13 @@ public class Clients {
 
         users.add(user);
     }
+
+    public User searchUser(String fullName) {
+        //searching for a specific user by name and last name
+        for(User current: users ) {
+            if( fullName.contains(current.getName()) && fullName.contains(current.getLastName()) )
+                return current ;
+        }
+    }
+
 }
