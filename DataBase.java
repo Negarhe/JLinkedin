@@ -4,11 +4,22 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DataBase {
+
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ap_project";
     private static final String USER = "root";
     private static final String PASS = "5396Mhed";
 
     public DataBase() {
+        try {
+            //load MuSQL JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //establish connection
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void insertUser(User user) {
@@ -55,5 +66,22 @@ public class DataBase {
         }
 
         return false;
+    }
+
+    public User getUser(String email) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM users WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+            return new User(statement.executeQuery().getString("email"),
+                    statement.executeQuery().getString("name"),
+                    statement.executeQuery().getString("last_name"),
+                    statement.executeQuery().getString("password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
