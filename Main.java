@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+
+
 public class Main {
     public static Scanner in = new Scanner(System.in);
 
@@ -9,21 +11,29 @@ public class Main {
         System.out.println("3. exit");
 
         Clients clients = new Clients();
+        DataBase dataBase = new DataBase();
 
         int choice = in.nextInt();
         in.nextLine();
-        String command = in.nextLine();
+
 
         if (choice == 1) {
-            System.out.println("Enter your email: ");
+            System.out.println("Email: ");
             String email = in.nextLine();
 
             if(email.contains("@") && email.contains(".")){
-                System.out.println("Enter your name: ");
+                //check if a user with this email is existing
+                if (dataBase.userExists(email)) {
+                    System.out.println("This email is already token.");
+                    return;
+                }
+
+                //if user doesn't exist
+                System.out.println("Name: ");
                 String name = in.nextLine();
-                System.out.println("Enter your last name: ");
+                System.out.println("last name: ");
                 String lastName = in.nextLine();
-                System.out.println("Enter your password: ");
+                System.out.println("password: ");
                 String password = in.nextLine();
                 //check if the password is strong enough
                 if (checkPass(password)) {
@@ -31,7 +41,7 @@ public class Main {
                     String password2 = in.nextLine();
                     if (password.equals(password2)) {
                         User user = new User(email, name, lastName, password);
-                        clients.addUser(user);
+                        dataBase.insertUser(user);
                     } else {
                         System.out.println("Passwords do not match");
                     }
@@ -48,6 +58,28 @@ public class Main {
         }
 
         else if(choice == 2){
+            System.out.println("email: ");
+            String email = in.nextLine();
+            System.out.println("password: ");
+            String password = in.nextLine();
+
+            if (email.contains("@") && email.contains(".")) {
+                //find the user with this email and if it doesn't exist print an error
+                if (dataBase.userExists(email)) {
+                    //check passwords match
+                    if (dataBase.checkPass(email, password)) {
+                        System.out.println("Logged in successfully");
+                    } else {
+                        System.out.println("Incorrect password");
+                    }
+                    System.out.println("invalid pass");
+                } else {
+                    System.out.println("User does not exist");
+                }
+            } else {
+                System.out.println("this email doesn't exist, please sign up first.");
+                return;
+            }
             displayMenu();
 
 
