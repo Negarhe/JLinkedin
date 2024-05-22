@@ -1,3 +1,5 @@
+import java.sql.SQLOutput;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -18,9 +20,22 @@ public class Main {
 
 
         if (choice == 1) {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             System.out.println("Email: ");
             String email = in.nextLine();
+            System.out.println("Password: ");
+            String pass = in.nextLine();
+            System.out.println("double check passWord: ");
+            String pass2 = in.nextLine();
+            System.out.println("Name: ");
+            String name = in.nextLine();
+            System.out.println("Last name: ");
+            String lastName = in.nextLine();
 
+<<<<<<< Updated upstream
             if(email.contains("@") && email.contains(".")){
                 //check if a user with this email is existing
                 if (dataBase.userExists(email)) {
@@ -46,15 +61,10 @@ public class Main {
                         System.out.println("Passwords do not match");
                     }
                 }
+=======
+            SignUp signUp = new SignUp(email, pass, pass2, name, lastName);
+>>>>>>> Stashed changes
 
-                //if password wasn't strong enough
-                else
-                    System.out.println("please choose a stronger password");
-            }
-
-            else{
-                System.out.println("Invalid email");
-            }
         }
 
         else if(choice == 2){
@@ -62,6 +72,7 @@ public class Main {
             String email = in.nextLine();
             System.out.println("password: ");
             String password = in.nextLine();
+<<<<<<< Updated upstream
 
             if (email.contains("@") && email.contains(".")) {
                 //find the user with this email and if it doesn't exist print an error
@@ -81,7 +92,10 @@ public class Main {
                 return;
             }
             displayMenu();
+=======
+>>>>>>> Stashed changes
 
+            LogIn logIn = new LogIn(email, password);
 
         }
 
