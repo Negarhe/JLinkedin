@@ -32,15 +32,10 @@ public class Main {
                 System.out.println("Last name: ");
                 String lastName = in.nextLine();
 
-<<<<<<< Updated upstream
-                SignUp signUp = new SignUp();
-                if (signUp.signUp(email, pass, pass2, name, lastName)){
-=======
 
                 User user1 = new User(email, name, lastName, pass);
 
                 if (user1.signUp(email, pass, pass2, name, lastName)){
->>>>>>> Stashed changes
                     User user = new User(email, name, lastName, pass);
                     displayMenu();
                     int choice2 = in.nextInt();
@@ -71,15 +66,10 @@ public class Main {
                 System.out.println("password: ");
                 String password = in.nextLine();
 
-<<<<<<< Updated upstream
-                LogIn logIn = new LogIn();
-                if (logIn.logIn(email, password)) {
-=======
                 DataBase dataBase = new DataBase();
                 User user = dataBase.getUser(email);
 
                 if (user.logIn(email, password)) {
->>>>>>> Stashed changes
                     displayMenu();
 
                     int choice2 = in.nextInt();
