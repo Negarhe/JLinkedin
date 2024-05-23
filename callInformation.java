@@ -1,12 +1,20 @@
+<<<<<<< Updated upstream:callInformation.java
 public class callInformation {
+=======
+public class ContactInformation {
+    public enum Kind {
+        HOME, JOB, MOBILE
+    }
+
+>>>>>>> Stashed changes:ContactInformation.java
     private String email;
     private String phoneNumber;
-    private String kind;//home, job or mobile
+    private Kind kind;//home, job or mobile
     private String address;//220 character
     private String birthday;
     private String relationshipStatus;// telegram or whatsapp or skype ...
 
-    public callInformation(String email, String phoneNumber, String kind, String address, String birthday, String relationshipStatus) {
+    public ContactInformation(String email, String phoneNumber, Kind kind, String address, String birthday, String relationshipStatus) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.kind = kind;
@@ -31,11 +39,11 @@ public class callInformation {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getKind() {
+    public Kind getKind() {
         return kind;
     }
 
-    public void setKind(String kind) {
+    public void setKind(Kind kind) {
         this.kind = kind;
     }
 
