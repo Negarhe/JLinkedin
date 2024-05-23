@@ -12,97 +12,71 @@ public class Main {
         System.out.println("2. Login");
         System.out.println("3. exit");
 
-        Clients clients = new Clients();
-        DataBase dataBase = new DataBase();
+
 
         int choice = in.nextInt();
         in.nextLine();
 
 
-        if (choice == 1) {
-<<<<<<< Updated upstream
-=======
+        while (true){
+            if(choice == 1) {
 
->>>>>>> Stashed changes
-            System.out.println("Email: ");
-            String email = in.nextLine();
-            System.out.println("Password: ");
-            String pass = in.nextLine();
-            System.out.println("double check passWord: ");
-            String pass2 = in.nextLine();
-            System.out.println("Name: ");
-            String name = in.nextLine();
-            System.out.println("Last name: ");
-            String lastName = in.nextLine();
-
-<<<<<<< Updated upstream
-            if(email.contains("@") && email.contains(".")){
-                //check if a user with this email is existing
-                if (dataBase.userExists(email)) {
-                    System.out.println("This email is already token.");
-                    return;
-                }
-
-                //if user doesn't exist
+                System.out.println("Email: ");
+                String email = in.nextLine();
+                System.out.println("Password: ");
+                String pass = in.nextLine();
+                System.out.println("double check passWord: ");
+                String pass2 = in.nextLine();
                 System.out.println("Name: ");
                 String name = in.nextLine();
-                System.out.println("last name: ");
+                System.out.println("Last name: ");
                 String lastName = in.nextLine();
+
+                SignUp signUp = new SignUp(email, pass, pass2, name, lastName);
+                displayMenu();
+                int choice2 = in.nextInt();
+                in.nextLine();
+
+                if (choice2 == 1) {
+                    //view profile
+                } else if (choice2 == 2) {
+                    //create a post
+                } else if (choice2 == 3) {
+                    //search for a user
+                } else if (choice2 == 4) {
+                    //show the feed
+                }
+
+            }
+
+        else if (choice == 2) {
+                System.out.println("email: ");
+                String email = in.nextLine();
                 System.out.println("password: ");
                 String password = in.nextLine();
-                //check if the password is strong enough
-                if (checkPass(password)) {
-                    System.out.println("Enter your password again: ");
-                    String password2 = in.nextLine();
-                    if (password.equals(password2)) {
-                        User user = new User(email, name, lastName, password);
-                        dataBase.insertUser(user);
-                    } else {
-                        System.out.println("Passwords do not match");
-                    }
+
+                LogIn logIn = new LogIn();
+                logIn.LogIn(email, password);
+                displayMenu();
+
+                int choice2 = in.nextInt();
+                in.nextLine();
+
+                if (choice2 == 1) {
+                    //view profile
+                } else if (choice2 == 2) {
+                    //create a post
+                } else if (choice2 == 3) {
+                    //search for a user
+                } else if (choice2 == 4) {
+                    //show the feed
                 }
-=======
-            SignUp signUp = new SignUp(email, pass, pass2, name, lastName);
->>>>>>> Stashed changes
 
-        }
 
-        else if(choice == 2){
-            System.out.println("email: ");
-            String email = in.nextLine();
-            System.out.println("password: ");
-            String password = in.nextLine();
-<<<<<<< Updated upstream
-
-            if (email.contains("@") && email.contains(".")) {
-                //find the user with this email and if it doesn't exist print an error
-                if (dataBase.userExists(email)) {
-                    //check passwords match
-                    if (dataBase.checkPass(email, password)) {
-                        System.out.println("Logged in successfully");
-                    } else {
-                        System.out.println("Incorrect password");
-                    }
-                    System.out.println("invalid pass");
-                } else {
-                    System.out.println("User does not exist");
-                }
-            } else {
-                System.out.println("this email doesn't exist, please sign up first.");
-                return;
+            } else if (choice == 3) {
+                System.exit(0);
             }
-            displayMenu();
-=======
->>>>>>> Stashed changes
-
-            LogIn logIn = new LogIn(email, password);
-
         }
-
-        else if(choice == 3){
-            System.exit(0);
-        }
-
     }
 
     private static boolean checkPass(String password) {
