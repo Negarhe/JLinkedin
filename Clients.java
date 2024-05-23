@@ -33,6 +33,7 @@ public class Clients {
             if( fullName.contains(current.getName()) && fullName.contains(current.getLastName()) )
                 return current ;
         }
+        return null;
     }
 
 }
