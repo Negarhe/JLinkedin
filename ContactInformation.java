@@ -1,12 +1,8 @@
-<<<<<<< Updated upstream:callInformation.java
-public class callInformation {
-=======
 public class ContactInformation {
     public enum Kind {
         HOME, JOB, MOBILE
     }
 
->>>>>>> Stashed changes:ContactInformation.java
     private String email;
     private String phoneNumber;
     private Kind kind;//home, job or mobile
