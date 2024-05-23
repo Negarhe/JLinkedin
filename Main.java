@@ -13,6 +13,7 @@ public class Main {
         System.out.println("3. exit");
 
 
+
         int choice = in.nextInt();
         in.nextLine();
 
@@ -30,29 +31,6 @@ public class Main {
                 String name = in.nextLine();
                 System.out.println("Last name: ");
                 String lastName = in.nextLine();
-              
-                System.out.println("Enter your password: ");
-                String password = in.nextLine();
-                //check if the password is strong enough
-                if (checkPass(password)) {
-                    System.out.println("Enter your password again: ");
-                    String password2 = in.nextLine();
-                    if (password.equals(password2)) {
-                        User user = new User(email, name, lastName, password);
-                        clients.addUser(user);
-                    } else {
-                        System.out.println("Passwords do not match");
-                    }
-                }
-
-                //if password wasn't strong enough
-                else
-                    System.out.println("please choose a stronger password");
-            }
-
-            else{
-                System.out.println("Invalid email");
-
 
                 SignUp signUp = new SignUp(email, pass, pass2, name, lastName);
                 displayMenu();
@@ -119,17 +97,5 @@ public class Main {
         System.out.println("2- create a post");
         System.out.println("3- search for a user");
         System.out.println("4- show the feed");
-    }
-
-    private static boolean checkPass(String password) {
-        boolean allNumbers = true;
-        for (int i = 0; i < password.length(); i++) {
-            if (!Character.isDigit(password.charAt(i))) {
-                allNumbers = false;
-                break;
-            }
-        }
-
-        return !allNumbers && password.length() >= 8;
     }
 }
