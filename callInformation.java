@@ -1,26 +1,12 @@
-<<<<<<<< HEAD:ContactInformation.java
-========
-<<<<<<< Updated upstream:callInformation.java
 public class callInformation {
-=======
->>>>>>>> 0b80883635b81927ef6bdfae0e5c5845283f8484:callInformation.java
-public class ContactInformation {
-    public enum Kind {
-        HOME, JOB, MOBILE
-    }
-
-<<<<<<<< HEAD:ContactInformation.java
-========
->>>>>>> Stashed changes:ContactInformation.java
->>>>>>>> 0b80883635b81927ef6bdfae0e5c5845283f8484:callInformation.java
     private String email;
     private String phoneNumber;
-    private Kind kind;//home, job or mobile
+    private String kind;//home, job or mobile
     private String address;//220 character
     private String birthday;
     private String relationshipStatus;// telegram or whatsapp or skype ...
 
-    public ContactInformation(String email, String phoneNumber, Kind kind, String address, String birthday, String relationshipStatus) {
+    public callInformation(String email, String phoneNumber, String kind, String address, String birthday, String relationshipStatus) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.kind = kind;
@@ -45,11 +31,11 @@ public class ContactInformation {
         this.phoneNumber = phoneNumber;
     }
 
-    public Kind getKind() {
+    public String getKind() {
         return kind;
     }
 
-    public void setKind(Kind kind) {
+    public void setKind(String kind) {
         this.kind = kind;
     }
 
