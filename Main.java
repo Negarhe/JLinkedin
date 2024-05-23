@@ -32,19 +32,28 @@ public class Main {
                 System.out.println("Last name: ");
                 String lastName = in.nextLine();
 
-                SignUp signUp = new SignUp(email, pass, pass2, name, lastName);
-                displayMenu();
-                int choice2 = in.nextInt();
-                in.nextLine();
+                SignUp signUp = new SignUp();
+                if (signUp.signUp(email, pass, pass2, name, lastName)){
+                    User user = new User(email, name, lastName, pass);
+                    displayMenu();
+                    int choice2 = in.nextInt();
+                    in.nextLine();
 
-                if (choice2 == 1) {
-                    //view profile
-                } else if (choice2 == 2) {
-                    //create a post
-                } else if (choice2 == 3) {
-                    //search for a user
-                } else if (choice2 == 4) {
-                    //show the feed
+                    if (choice2 == 1) {
+                        //view profile
+                        user.displayProfile(user.getEmail());
+                        System.out.println("Do you want to edit your profile? (yes/no)");
+                        String answer = in.nextLine();
+                        if (answer.equalsIgnoreCase("yes")) {
+                            user.editProfile();
+                        }
+                    } else if (choice2 == 2) {
+                        //create a post
+                    } else if (choice2 == 3) {
+                        //search for a user
+                    } else if (choice2 == 4) {
+                        //show the feed
+                    }
                 }
 
             }
@@ -56,20 +65,21 @@ public class Main {
                 String password = in.nextLine();
 
                 LogIn logIn = new LogIn();
-                logIn.LogIn(email, password);
-                displayMenu();
+                if (logIn.logIn(email, password)) {
+                    displayMenu();
 
-                int choice2 = in.nextInt();
-                in.nextLine();
+                    int choice2 = in.nextInt();
+                    in.nextLine();
 
-                if (choice2 == 1) {
-                    //view profile
-                } else if (choice2 == 2) {
-                    //create a post
-                } else if (choice2 == 3) {
-                    //search for a user
-                } else if (choice2 == 4) {
-                    //show the feed
+                    if (choice2 == 1) {
+                        //view profile
+                    } else if (choice2 == 2) {
+                        //create a post
+                    } else if (choice2 == 3) {
+                        //search for a user
+                    } else if (choice2 == 4) {
+                        //show the feed
+                    }
                 }
 
 
