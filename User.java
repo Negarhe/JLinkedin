@@ -14,11 +14,7 @@ public class User {
     //two fields for profile photo and background photo
 
     private String profession ; //60 character, for example "software engineering"
-<<<<<<< Updated upstream
-    private String status ; //seeking job? hiring? providing services?
-=======
     private Status status ; //seeking job? hiring? providing services?
->>>>>>> Stashed changes
 
     private ArrayList<Job> experiences ; //from the oldest to the latest
     private ArrayList<Education> educations ; //from the oldest to the latest
@@ -32,39 +28,24 @@ public class User {
 
     public User(String email, String name, String lastName, String password ){
 
-<<<<<<< Updated upstream
-        this.name = name ;
-        this.lastName = lastName ;
-        this.password = password ;
-        if(emailValidityCheck())
-            this.email = email ;
-=======
         if(emailValidityCheck(email)) {
             this.email = email;
             this.name = name;
             this.lastName = lastName;
             this.password = password;
         }
->>>>>>> Stashed changes
         else
             System.out.println("Invalid email");
     }
 
     //format checking methods, also we can use try-catch blocks
 //    public boolean passwordDoubleCheck() {}
-<<<<<<< Updated upstream
-    public boolean emailValidityCheck() {
-        return email.contains("@") && email.contains(".");
-    }
-    public void displayProfile() {}
-=======
     public boolean emailValidityCheck(String email) {
         return email.contains("@") && email.contains(".");
     }
     public void displayProfile() {
 
     }
->>>>>>> Stashed changes
     public void editProfile() {}
 
 
@@ -101,8 +82,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-<<<<<<< Updated upstream
-=======
 
     public String getTitle() {
         return title;
@@ -175,5 +154,4 @@ public class User {
     public void setEducations(ArrayList<Education> educations) {
         this.educations = educations;
     }
->>>>>>> Stashed changes
 }
