@@ -57,6 +57,68 @@ public class User {
     public boolean emailValidityCheck(String email) {
         return email.contains("@") && email.contains(".");
     }
+
+    public boolean signUp (String email, String pass, String pass2, String name, String lastName) {
+        if (emailValidityCheck(email)) {
+            if (checkPass(pass)) {
+                if (pass.equals(pass2)) {
+                    User user = new User(email, name, lastName, pass);
+                    DataBase dataBase = new DataBase();
+                    dataBase.insertUser(user);
+                    return true;
+                } else {
+                    System.out.println("Passwords do not match!");
+                    return false;
+
+                }
+            }
+            else {
+                System.out.println("please choose a stronger password!");
+                return false;
+            }
+        }
+
+        else
+            System.out.println("invalid email!");
+
+        return false;
+    }
+
+    public boolean checkPass(String password) {
+        if (password.length() < 8) {
+            return false;
+        }
+        boolean hasUppercase = !password.equals(password.toLowerCase());
+        boolean hasLowercase = !password.equals(password.toUpperCase());
+        boolean hasDigit = password.matches(".*\\d.*");
+        boolean hasSpecial = !password.matches("[A-Za-z0-9 ]*");
+        return hasUppercase && hasLowercase && hasDigit && hasSpecial;
+    }
+
+    public boolean logIn (String email, String password) {
+        //search in dataBase if you have a user with this email
+        //if yes, check if the password is correct
+        //if yes, show the user's profile
+        //if no, show an error message
+
+        DataBase dataBase = new DataBase();
+        User user = dataBase.getUser(email);
+
+        if (user != null) {
+            if (dataBase.checkPass(email, password)) {
+                System.out.println("Welcome " + user.getName() + " " + user.getLastName());
+                return  true;
+            } else {
+                System.out.println("Wrong password");
+                return false;
+            }
+        } else {
+            System.out.println("User not found");
+            return false;
+        }
+
+    }
+
     public void displayProfile(String email) {
         DataBase dataBase = new DataBase();
         User user = dataBase.getUser(email);
@@ -155,10 +217,14 @@ public class User {
                 System.out.println("Relationship status: ");
                 String relationshipStatus = Main.in.nextLine();
                 this.setContactInfo(new ContactInformation(this.email, phoneNumber, kind, address, birthday, relationshipStatus));
+                //set contactInfo in dataBase
+                dataBase.updateUserContactInfo(this.getEmail(), this.getContactInfo());
                 break;
             case 6:
                 System.out.println("Enter the new profession: ");
                 this.setProfession(Main.in.nextLine());
+                //set profession in dataBase
+                dataBase.updateUserProfession(this.getEmail(), this.getProfession());
                 break;
             case 7:
                 System.out.println("Enter the new status: ");
@@ -178,6 +244,8 @@ public class User {
                         this.setStatus(Status.PROVIDING_SERVICES);
                         break;
                 }
+                //set status in dataBase
+                dataBase.updateUserStatus(this.getEmail(), this.getStatus());
         }
     }
 
