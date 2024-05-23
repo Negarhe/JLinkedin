@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DataBase {
 
@@ -24,14 +21,17 @@ public class DataBase {
 
     public void insertUser(User user) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "INSERT INTO users (email, name, last_name, password) VALUES (?, ?, ?, ?)";
+            if (!userExists(user.getEmail())){
+                String query = "INSERT INTO users (email, name, lastName, password) VALUES (?, ?, ?, ?)";
 
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getName());
-            statement.setString(3, user.getLastName());
-            statement.setString(4, user.getPassword());
-            statement.executeUpdate();
+                PreparedStatement statement = conn.prepareStatement(query);
+                statement.setString(1, user.getEmail());
+                statement.setString(2, user.getName());
+                statement.setString(3, user.getLastName());
+                statement.setString(4, user.getPassword());
+
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,6 +43,7 @@ public class DataBase {
 
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, email);
+            System.out.println("this email is already taken, please LogIn!");
             return statement.executeQuery().next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,14 +75,74 @@ public class DataBase {
 
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, email);
-            return new User(statement.executeQuery().getString("email"),
-                    statement.executeQuery().getString("name"),
-                    statement.executeQuery().getString("last_name"),
-                    statement.executeQuery().getString("password"));
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new User(resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("password"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    public void updateUserTitle(String email, String title) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users SET title = ? WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, title);
+            statement.setString(2, email);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserAdditionalName(String email, String additionalName) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users SET additionalName = ? WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, additionalName);
+            statement.setString(2, email);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserCity (String email, String city) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users SET city = ? WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, city);
+            statement.setString(2, email);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserCountry(String email, String country) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users SET country = ? WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, country);
+            statement.setString(2, email);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
