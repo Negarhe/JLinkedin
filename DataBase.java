@@ -181,17 +181,54 @@ public class DataBase {
     }
 
 
-    public void updateUserStatus(String email, Status status) {
+    public void updateUserStatus(String email, String status) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String query = "UPDATE users SET status = ? WHERE email = ?";
 
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, status.toString());
+            statement.setString(1, status);
             statement.setString(2, email);
 
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public User searchUser(String fullName) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM users WHERE name = ? AND lastName = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, fullName.split(" ")[0]);
+            statement.setString(2, fullName.split(" ")[1]);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new User(resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void insertPost(String email, Post post) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "INSERT INTO posts (email, text) VALUES (?, ?)";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+            statement.setString(2, post.getText());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         }
     }
 }

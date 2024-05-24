@@ -13,13 +13,12 @@ public class Main {
         System.out.println("3. exit");
 
 
-
         int choice = in.nextInt();
         in.nextLine();
 
 
-        while (true){
-            if(choice == 1) {
+        while (true) {
+            if (choice == 1) {
 
                 System.out.println("Email: ");
                 String email = in.nextLine();
@@ -33,34 +32,37 @@ public class Main {
                 String lastName = in.nextLine();
 
 
-                User user1 = new User(email, name, lastName, pass);
+                User user = new User(email, name, lastName, pass);
 
-                if (user1.signUp(email, pass, pass2, name, lastName)){
-                    User user = new User(email, name, lastName, pass);
+                if (user.signUp(email, pass, pass2, name, lastName)) {
                     displayMenu();
                     int choice2 = in.nextInt();
                     in.nextLine();
 
                     if (choice2 == 1) {
                         //view profile
-                        user.displayProfile(user.getEmail());
-                        System.out.println("Do you want to edit your profile? (yes/no)");
-                        String answer = in.nextLine();
-                        if (answer.equalsIgnoreCase("yes")) {
-                            user.editProfile();
-                        }
+                        profile(user);
+
                     } else if (choice2 == 2) {
                         //create a post
+                        user.createPost();
                     } else if (choice2 == 3) {
-                        //search for a user
+                        //search for a user in dataBase
+                        System.out.println("Enter the name of the user you are looking for: ");
+                        String fullName = in.nextLine();
+                        DataBase dataBase = new DataBase();
+                        User searchedUser = dataBase.searchUser(fullName);
+                        if (searchedUser != null) {
+                            searchedUser.displayProfile(searchedUser.getEmail());
+                        } else {
+                            System.out.println("User not found!");
+                        }
                     } else if (choice2 == 4) {
                         //show the feed
                     }
                 }
 
-            }
-
-        else if (choice == 2) {
+            } else if (choice == 2) {
                 System.out.println("email: ");
                 String email = in.nextLine();
                 System.out.println("password: ");
@@ -77,10 +79,20 @@ public class Main {
 
                     if (choice2 == 1) {
                         //view profile
+                        profile(user);
                     } else if (choice2 == 2) {
                         //create a post
+                        user.createPost();
                     } else if (choice2 == 3) {
-                        //search for a user
+                        //search for a user in dataBase
+                        System.out.println("Enter the name of the user you are looking for: ");
+                        String fullName = in.nextLine();
+                        User searchedUser = dataBase.searchUser(fullName);
+                        if (searchedUser != null) {
+                            searchedUser.displayProfile(searchedUser.getEmail());
+                        } else {
+                            System.out.println("User not found!");
+                        }
                     } else if (choice2 == 4) {
                         //show the feed
                     }
@@ -91,6 +103,18 @@ public class Main {
                 System.exit(0);
             }
         }
+    }
+
+
+    private static void profile(User user) {
+        user.displayProfile(user.getEmail());
+        System.out.println("Do you want to edit your profile? (yes/no)");
+        String answer = in.nextLine();
+        if (answer.equalsIgnoreCase("yes")) {
+            user.editProfile();
+        }
+        else
+            return;
     }
 
     private static boolean checkPass(String password) {
