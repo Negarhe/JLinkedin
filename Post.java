@@ -1,29 +1,60 @@
 import java.util.HashMap;
+import java.util.*;
 
 public class Post {
     private String text;//3000 char
-    private HashMap<String, Integer> likes;
-    private HashMap<String, String> comments;
+    private ArrayList<User> likes;
+    private HashMap<User, String> comments ; //each comment mapped to a user
+    //private HashMap<String, Integer> likes;
+    //private HashMap<String, String> comments;
+    private String timeStamp ;
 
     public Post(String text) {
         this.text = text;
-        this.likes = new HashMap<>();
+        this.likes = new ArrayList<>();
         this.comments = new HashMap<>();
+        Date d = new Date(); //time of creating the post
+        this.timeStamp = d ;
     }
 
-    public HashMap<String, Integer> getLikes() {
+    public void displayPost() {
+        System.out.println("-----------------------------");
+        System.out.println("Post : " + text );
+        System.out.println("Date : " + timeStamp );
+        System.out.println("Number of likes: " + likes.size());
+        System.out.println("Comments on this post: ");
+        displayComments();
+        System.out.println("-----------------------------");
+    }
+
+    public void displayComments() {
+        //displaying all comments on a single post
+        for (Map.Entry<User, String> set : comments.entrySet()) {
+            System.out.println(set.getKey().getName() + "says: " + set.getValue());
+        }
+    }
+
+    public void addComment(User user, String comment){
+        comments.put(User, comment);
+    }
+
+    public void likePost(User user){
+        likes.add(user);
+    }
+
+    public ArrayList<User> getLikes() {
         return likes;
     }
 
-    public void setLikes(HashMap<String, Integer> likes) {
+    public void setLikes(ArrayList<User> likes) {
         this.likes = likes;
     }
 
-    public HashMap<String, String> getComments() {
+    public HashMap<User, String> getComments() {
         return comments;
     }
 
-    public void setComments(HashMap<String, String> comments) {
+    public void setComments(HashMap<User, String> comments) {
         this.comments = comments;
     }
 

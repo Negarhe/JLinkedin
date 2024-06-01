@@ -90,11 +90,31 @@ public class Main {
                         User searchedUser = dataBase.searchUser(fullName);
                         if (searchedUser != null) {
                             searchedUser.displayProfile(searchedUser.getEmail());
+                            System.out.println("Do you want to follow this user?");
+                            String answer = in.nextLine();
+                            if (answer.contains("Yes")){
+                                followAUser(user, searchedUser);
+                            }
+
+
                         } else {
                             System.out.println("User not found!");
                         }
                     } else if (choice2 == 4) {
-                        //show the feed
+                        //feed: show the posts of your followings
+                        for (User current : user.getFollowing()) {
+                            for (Post current2 : current.getPosts()) {
+                                current2.displayPost();
+                            }
+                        }
+                    }
+                     else if(choice2 == 5) {
+                        System.out.println("---Your Followings: --- ");
+                        for (User current : user.getFollowing())
+                            current.displayProfile();
+                        System.out.println("---Your Followers: --- ");
+                        for (User current2 : user.getFollowers())
+                            current2.displayProfile();
                     }
                 }
 
@@ -116,6 +136,11 @@ public class Main {
         else
             return;
     }
+    private static void followAUser(User user, User searchedUser){
+        user.getFollowing().add(searchedUser);
+        searchedUser.getFollowers().add(User);
+
+    }
 
     private static boolean checkPass(String password) {
         boolean allNumbers = true;
@@ -131,9 +156,10 @@ public class Main {
 
     //just a simple menu once the user logged in
     private static void displayMenu() {
-        System.out.println("1- view your profile");
+        System.out.println("1- view my profile");
         System.out.println("2- create a post");
-        System.out.println("3- search for a user");
-        System.out.println("4- show the feed");
+        System.out.println("3- search for a user & follow");
+        System.out.println("4- show my feed");
+        System.out,println("5- show my followers and followings");
     }
 }
