@@ -1,4 +1,8 @@
+import java.lang.reflect.Type;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DataBase {
 
@@ -230,5 +234,69 @@ public class DataBase {
             e.printStackTrace();
 
         }
+    }
+
+
+    public List<User> getFollowings(String email) {
+        List<User> followings = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM followings WHERE user_email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User following = getUser(resultSet.getString("following_email"));
+                followings.add(following);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return followings;
+    }
+
+    public List<Post> getPosts(String email) {
+        List<Post> posts = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM posts WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Post post = new Post(resultSet.getString("text"));
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return posts;
+    }
+
+    public List<User> getFollowers(String email) {
+        List<User> followers = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM followers WHERE user_email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User follower = getUser(resultSet.getString("follower_email"));
+                followers.add(follower);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return followers;
     }
 }

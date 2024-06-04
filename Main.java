@@ -1,4 +1,6 @@
+import javax.xml.crypto.Data;
 import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -59,7 +61,29 @@ public class Main {
                         }
                     } else if (choice2 == 4) {
                         //show the feed
+                        DataBase dataBase = new DataBase();
+                        List<User> followings = dataBase.getFollowings(user.getEmail());
+                        if (followings == null) {
+                            //print something that user understand
+                            System.out.println("No followings found for this user!");
+                        }else {
+                            for (User following : followings) {
+                                List<Post> posts = dataBase.getPosts(following.getEmail());
+                                for (Post post : posts) {
+                                    post.displayPost();
+                                }
+                            }
+                        }
+
+                    } else if(choice2 == 5) {
+                        System.out.println("---Your Followings: --- ");
+                        for (User current : user.getFollowing())
+                            current.displayProfile(current.getEmail());
+                        System.out.println("---Your Followers: --- ");
+                        for (User current2 : user.getFollowers())
+                            current2.displayProfile(current2.getEmail());
                     }
+
                 }
 
             } else if (choice == 2) {
@@ -80,7 +104,7 @@ public class Main {
                     if (choice2 == 1) {
                         //view profile
                         profile(user);
-                    } else if (choice2 == 2) {
+                      } else if (choice2 == 2) {
                         //create a post
                         user.createPost();
                     } else if (choice2 == 3) {
@@ -101,20 +125,29 @@ public class Main {
                             System.out.println("User not found!");
                         }
                     } else if (choice2 == 4) {
-                        //feed: show the posts of your followings
-                        for (User current : user.getFollowing()) {
-                            for (Post current2 : current.getPosts()) {
-                                current2.displayPost();
+                        //show the feed
+                        List<User> followings = dataBase.getFollowings(user.getEmail());
+                        if (followings == null) {
+                            //print something that user understand
+                            System.out.println("No followings found for this user!");
+                        }else {
+                            for (User following : followings) {
+                                List<Post> posts = dataBase.getPosts(following.getEmail());
+                                for (Post post : posts) {
+                                    post.displayPost();
+                                }
                             }
                         }
                     }
                      else if(choice2 == 5) {
                         System.out.println("---Your Followings: --- ");
-                        for (User current : user.getFollowing())
-                            current.displayProfile();
+                        List<User> followings = dataBase.getFollowings(user.getEmail());
+                        for (User current : followings)
+                            current.displayProfile(current.getEmail());
                         System.out.println("---Your Followers: --- ");
-                        for (User current2 : user.getFollowers())
-                            current2.displayProfile();
+                        List<User> followers = dataBase.getFollowers(user.getEmail());
+                        for (User current2 : followers)
+                            current2.displayProfile(current2.getEmail());
                     }
                 }
 
@@ -138,7 +171,7 @@ public class Main {
     }
     private static void followAUser(User user, User searchedUser){
         user.getFollowing().add(searchedUser);
-        searchedUser.getFollowers().add(User);
+        searchedUser.getFollowers().add(user);
 
     }
 
@@ -160,6 +193,6 @@ public class Main {
         System.out.println("2- create a post");
         System.out.println("3- search for a user & follow");
         System.out.println("4- show my feed");
-        System.out,println("5- show my followers and followings");
+        System.out.println("5- show my followers and followings");
     }
 }

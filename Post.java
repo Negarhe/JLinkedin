@@ -5,16 +5,14 @@ public class Post {
     private String text;//3000 char
     private ArrayList<User> likes;
     private HashMap<User, String> comments ; //each comment mapped to a user
-    //private HashMap<String, Integer> likes;
-    //private HashMap<String, String> comments;
-    private String timeStamp ;
+    private final String timeStamp ;
 
     public Post(String text) {
         this.text = text;
         this.likes = new ArrayList<>();
         this.comments = new HashMap<>();
         Date d = new Date(); //time of creating the post
-        this.timeStamp = d ;
+        this.timeStamp = d.toString() ;//d is a date but timeStamp is an String
     }
 
     public void displayPost() {
@@ -34,8 +32,12 @@ public class Post {
         }
     }
 
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
     public void addComment(User user, String comment){
-        comments.put(User, comment);
+        comments.put(user, comment);
     }
 
     public void likePost(User user){
