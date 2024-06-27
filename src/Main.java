@@ -1,7 +1,8 @@
-import javax.xml.crypto.Data;
-import java.sql.SQLOutput;
+import model.DataBase;
+import model.Post;
+import model.User;
+
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -36,14 +37,14 @@ public class Main {
 
                 User user = new User(email, name, lastName, pass);
 
-                if (user.signUp(email, pass, pass2, name, lastName)) {
+                if (user.signUp()) {
                     displayMenu();
                     int choice2 = in.nextInt();
                     in.nextLine();
 
                     if (choice2 == 1) {
                         //view profile
-                        profile(user);
+                        viewProfile(user);
 
                     } else if (choice2 == 2) {
                         //create a post
@@ -57,7 +58,7 @@ public class Main {
                         if (searchedUser != null) {
                             searchedUser.displayProfile(searchedUser.getEmail());
                         } else {
-                            System.out.println("User not found!");
+                            System.out.println("model.User not found!");
                         }
                     } else if (choice2 == 4) {
                         //show the feed
@@ -106,7 +107,7 @@ public class Main {
 
                     if (choice2 == 1) {
                         //view profile
-                        profile(user);
+                        viewProfile(user);
                       } else if (choice2 == 2) {
                         //create a post
                         user.createPost();
@@ -125,7 +126,7 @@ public class Main {
 
 
                         } else {
-                            System.out.println("User not found!");
+                            System.out.println("model.User not found!");
                         }
                     } else if (choice2 == 4) {
                         //show the feed
@@ -162,7 +163,7 @@ public class Main {
     }
 
 
-    private static void profile(User user) {
+    private static void viewProfile(User user) {
         user.displayProfile(user.getEmail());
         System.out.println("Do you want to edit your profile? (yes/no)");
         String answer = in.nextLine();

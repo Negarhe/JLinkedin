@@ -1,4 +1,5 @@
-import javax.xml.crypto.Data;
+package model;
+
 import java.util.*;
 
 public class User {
@@ -7,39 +8,41 @@ public class User {
         SEEKING_JOB, HIRING, PROVIDING_SERVICES
     }
 
-    private String title ; //220 character, a brief overview
-    private String email ; //need to check validity
-    private String name ; //20 character
-    private String lastName ; //40 character
-    private String password ; //need to check validity
-    private String additionalName ; //40 character
-    private String city ; //60 character
-    private String country ; //60 character
-    private ContactInformation contactInfo ; //phone number, address, birthday, relationship status
+    private String title; //220 character, a brief overview
+    private String email; //need to check validity
+    private String name; //20 character
+    private String lastName; //40 character
+    private String password; //need to check validity
+    private String additionalName; //40 character
+    private String city; //60 character
+    private String country; //60 character
+    private ContactInformation contactInfo; //phone number, address, birthday, relationship status
     //two fields for profile photo and background photo
-    private String profilePhoto ; //link to the photo
-    private String backgroundPhoto ; //link to the photo
+    private String profilePhoto; //link to the photo
+    private String backgroundPhoto; //link to the photo
 
-    private String profession ; //60 character, for example "software engineering"
-    private Status status ; //seeking job? hiring? providing services?
-    private ArrayList<User> connections ; //people that you are connected to
-    private ArrayList<User> followers ; //people that are following you
-    private ArrayList<User> following ; //people that you are following
+    private String profession; //60 character, for example "software engineering"
+    private Status status; //seeking job? hiring? providing services?
+    private ArrayList<User> connections; //people that you are connected to
+    private ArrayList<User> followers; //people that are following you
+    private ArrayList<User> following; //people that you are following
     private ArrayList<Post> posts; //posts that you have created
 
-    private ArrayList<Job> experiences ; //from the oldest to the latest
-    private ArrayList<Education> educations ; //from the oldest to the latest
+    private ArrayList<Job> experiences; //from the oldest to the latest
+    private ArrayList<Education> educations; //from the oldest to the latest
+
+    private Scanner scanner = new Scanner(System.in);
 
 
     /**
-     constructor = sign up method
-     constructing a user only consists of getting email, name, last name and password and adding the user to server's list
-     other fields should be completed later.
+     * constructor = sign up method
+     * constructing a user only consists of getting email, name, last name and password and adding the user to server's list
+     * other fields should be completed later.
      **/
 
-    public User(String email, String name, String lastName, String password ){
+    public User(String email, String name, String lastName, String password) {
 
-        if(emailValidityCheck(email)) {
+        if (emailValidityCheck(email)) {
             this.email = email;
             this.name = name;
             this.lastName = lastName;
@@ -59,8 +62,7 @@ public class User {
             this.followers = new ArrayList<>();
             this.following = new ArrayList<>();
             this.posts = new ArrayList<>();
-        }
-        else
+        } else
             System.out.println("Invalid email");
     }
 
@@ -70,27 +72,19 @@ public class User {
         return email.contains("@") && email.contains(".");
     }
 
-    public boolean signUp (String email, String pass, String pass2, String name, String lastName) {
+    public boolean signUp() {
         if (emailValidityCheck(email)) {
-            if (checkPass(pass)) {
-                if (pass.equals(pass2)) {
-                    User user = new User(email, name, lastName, pass);
-                    DataBase dataBase = new DataBase();
-                    dataBase.insertUser(user);
-                    return true;
-                } else {
-                    System.out.println("Passwords do not match!");
-                    return false;
-
-                }
-            }
-            else {
+            if (checkPass(password)) {
+//                if (pass.equals(pass2)) {
+                User user = new User(email, name, lastName, password);
+                DataBase dataBase = new DataBase();
+                dataBase.insertUser(user);
+                return true;
+            } else {
                 System.out.println("please choose a stronger password!");
                 return false;
             }
-        }
-
-        else
+        } else
             System.out.println("invalid email!");
 
         return false;
@@ -107,7 +101,7 @@ public class User {
         return hasUppercase && hasLowercase && hasDigit && hasSpecial;
     }
 
-    public boolean logIn (String email, String password) {
+    public boolean logIn(String email, String password) {
         //search in dataBase if you have a user with this email
         //if yes, check if the password is correct
         //if yes, show the user's profile
@@ -119,13 +113,13 @@ public class User {
         if (user != null) {
             if (dataBase.checkPass(email, password)) {
                 System.out.println("Welcome " + user.getName() + " " + user.getLastName());
-                return  true;
+                return true;
             } else {
                 System.out.println("Wrong password");
                 return false;
             }
         } else {
-            System.out.println("User not found");
+            System.out.println("model.User not found");
             return false;
         }
 
@@ -159,6 +153,7 @@ public class User {
         System.out.println("Profile photo: " + user.getProfilePhoto());
 
     }
+
     public void editProfile() {
         DataBase dataBase = new DataBase();
         System.out.println("What do you want to edit?");
@@ -176,45 +171,45 @@ public class User {
         System.out.println("12. none");
 
         int choice = 0;
-        while (choice != 12){
-            choice = Main.in.nextInt();
-            Main.in.nextLine();
+        while (choice != 12) {
+            choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
                     System.out.println("Enter the new title: ");
-                    this.setTitle(Main.in.nextLine());
+                    this.setTitle(scanner.nextLine());
                     //set title in dataBase
                     dataBase.updateUserTitle(this.getEmail(), this.getTitle());
                     break;
                 case 2:
                     System.out.println("Enter the new additional name: ");
-                    this.setAdditionalName(Main.in.nextLine());
+                    this.setAdditionalName(scanner.nextLine());
                     //set additionalName in dataBase
                     dataBase.updateUserAdditionalName(this.getEmail(), this.getAdditionalName());
                     break;
                 case 3:
                     System.out.println("Enter the new city: ");
-                    this.setCity(Main.in.nextLine());
+                    this.setCity(scanner.nextLine());
                     //set city in dataBase
                     dataBase.updateUserCity(this.getEmail(), this.getCity());
                     break;
                 case 4:
                     System.out.println("Enter the new country: ");
-                    this.setCountry(Main.in.nextLine());
+                    this.setCountry(scanner.nextLine());
                     //set country in dataBase
                     dataBase.updateUserCountry(this.getEmail(), this.getCountry());
                     break;
                 case 5:
                     System.out.println("Enter the new contact information: ");
                     System.out.println("Phone number: ");
-                    String phoneNumber = Main.in.nextLine();
+                    String phoneNumber = scanner.nextLine();
                     System.out.println("Kind: ");
                     System.out.println("1. Mobile");
                     System.out.println("2. Home");
                     System.out.println("3. Work");
-                    int kindChoice = Main.in.nextInt();
-                    Main.in.nextLine();
+                    int kindChoice = scanner.nextInt();
+                    scanner.nextLine();
                     ContactInformation.Kind kind = ContactInformation.Kind.MOBILE;
                     switch (kindChoice) {
                         case 1:
@@ -228,18 +223,18 @@ public class User {
                             break;
                     }
                     System.out.println("Address: ");
-                    String address = Main.in.nextLine();
+                    String address = scanner.nextLine();
                     System.out.println("Birthday: ");
-                    String birthday = Main.in.nextLine();
+                    String birthday = scanner.nextLine();
                     System.out.println("Relationship status: ");
-                    String relationshipStatus = Main.in.nextLine();
+                    String relationshipStatus = scanner.nextLine();
                     this.setContactInfo(new ContactInformation(this.email, phoneNumber, kind, address, birthday, relationshipStatus));
                     //set contactInfo in dataBase
                     dataBase.updateUserContactInfo(this.getEmail(), this.getContactInfo());
                     break;
                 case 6:
                     System.out.println("Enter the new profession: ");
-                    this.setProfession(Main.in.nextLine());
+                    this.setProfession(scanner.nextLine());
                     //set profession in dataBase
                     dataBase.updateUserProfession(this.getEmail(), this.getProfession());
                     break;
@@ -248,8 +243,8 @@ public class User {
                     System.out.println("1. Seeking job");
                     System.out.println("2. Hiring");
                     System.out.println("3. Providing services");
-                    int statusChoice = Main.in.nextInt();
-                    Main.in.nextLine();
+                    int statusChoice = scanner.nextInt();
+                    scanner.nextLine();
                     switch (statusChoice) {
                         case 1:
                             this.setStatus(Status.SEEKING_JOB);
@@ -270,7 +265,7 @@ public class User {
 
     public void createPost() {
         System.out.println("Enter the content of your post: ");
-        String content = Main.in.nextLine();
+        String content = scanner.nextLine();
         Post post = new Post(content);
         this.getPosts().add(post);
         DataBase dataBase = new DataBase();

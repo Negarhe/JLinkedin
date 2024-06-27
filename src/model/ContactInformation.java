@@ -1,3 +1,5 @@
+package model;
+
 public class ContactInformation {
     public enum Kind {
         HOME, JOB, MOBILE

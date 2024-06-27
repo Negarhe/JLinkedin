@@ -1,3 +1,5 @@
+package model;
+
 import java.util.HashMap;
 import java.util.*;
 
@@ -17,7 +19,7 @@ public class Post {
 
     public void displayPost() {
         System.out.println("-----------------------------");
-        System.out.println("Post : " + text );
+        System.out.println("model.Post : " + text );
         System.out.println("Date : " + timeStamp );
         System.out.println("Number of likes: " + likes.size());
         System.out.println("Comments on this post: ");
