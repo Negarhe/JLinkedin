@@ -77,10 +77,13 @@ public class Main {
 
                     } else if(choice2 == 5) {
                         System.out.println("---Your Followings: --- ");
-                        for (User current : user.getFollowing())
+                        DataBase dataBase = new DataBase();
+                        List<User> followings = dataBase.getFollowings(user.getEmail());
+                        for (User current : followings)
                             current.displayProfile(current.getEmail());
                         System.out.println("---Your Followers: --- ");
-                        for (User current2 : user.getFollowers())
+                        List<User> followers = dataBase.getFollowers(user.getEmail());
+                        for (User current2 : followers)
                             current2.displayProfile(current2.getEmail());
                     }
 

@@ -1,3 +1,0 @@
-public enum Status {
-SEEKING_JOB, HIRING, PROVIDING_SERVICES
-}
