@@ -1,4 +1,4 @@
-package model.server.requests;
+package controller.server.requests;
 
 public class Request {
     public static class SignupRequest {

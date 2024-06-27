@@ -1,10 +1,10 @@
-package model.server;
+package controller.server;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import model.User;
-import model.server.requests.Request;
+import controller.server.requests.Request;
 
 import java.io.BufferedReader;
 import java.io.IOException;

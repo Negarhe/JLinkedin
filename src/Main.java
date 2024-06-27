@@ -1,3 +1,4 @@
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import model.DataBase;
 import model.Post;
 import model.User;
@@ -86,6 +87,9 @@ public class Main {
                         List<User> followers = dataBase.getFollowers(user.getEmail());
                         for (User current2 : followers)
                             current2.displayProfile(current2.getEmail());
+                    } else if (choice2 == 6) {
+
+
                     }
 
                 }
@@ -198,5 +202,7 @@ public class Main {
         System.out.println("3- search for a user & follow");
         System.out.println("4- show my feed");
         System.out.println("5- show my followers and followings");
+        System.out.println("6- send request connection to a user");
+        System.out.println("7- show my requests");
     }
 }

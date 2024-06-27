@@ -4,6 +4,7 @@ import java.util.*;
 
 public class User {
 
+
     public enum Status {
         SEEKING_JOB, HIRING, PROVIDING_SERVICES
     }
@@ -424,4 +425,5 @@ public class User {
     public void setEducations(ArrayList<Education> educations) {
         this.educations = educations;
     }
+
 }
