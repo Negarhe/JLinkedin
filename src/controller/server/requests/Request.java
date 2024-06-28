@@ -30,4 +30,41 @@ public class Request {
             return lastName;
         }
     }
+
+    public static class LoginRequest {
+        private final String email;
+        private final String password;
+
+        public LoginRequest(String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+    }
+
+    public static class SearchRequest {
+        private final String query;
+        private final String token;
+
+        public SearchRequest(String query, String token) {
+            this.query = query;
+            this.token = token;
+        }
+
+        public String getQuery() {
+            return query;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+    }
 }

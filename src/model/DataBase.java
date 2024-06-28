@@ -301,4 +301,58 @@ public class DataBase {
         return followers;
     }
 
+
+    public User searchUserInDataBase(String email, String password) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+            statement.setString(2, password);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new User(resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void updateFollowers(String email, ArrayList<User> followers) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "INSERT INTO followers (user_email, follower_email) VALUES (?, ?)";
+
+            for (User follower : followers) {
+                PreparedStatement statement = conn.prepareStatement(query);
+                statement.setString(1, email);
+                statement.setString(2, follower.getEmail());
+
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateFollowings(String email, ArrayList<User> following) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "INSERT INTO followings (user_email, following_email) VALUES (?, ?)";
+
+            for (User follow : following) {
+                PreparedStatement statement = conn.prepareStatement(query);
+                statement.setString(1, email);
+                statement.setString(2, follow.getEmail());
+
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

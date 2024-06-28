@@ -4,7 +4,6 @@ import java.util.*;
 
 public class User {
 
-
     public enum Status {
         SEEKING_JOB, HIRING, PROVIDING_SERVICES
     }
@@ -102,7 +101,7 @@ public class User {
         return hasUppercase && hasLowercase && hasDigit && hasSpecial;
     }
 
-    public boolean logIn(String email, String password) {
+    public boolean logIn() {
         //search in dataBase if you have a user with this email
         //if yes, check if the password is correct
         //if yes, show the user's profile

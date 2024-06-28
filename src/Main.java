@@ -1,4 +1,5 @@
 import com.google.gson.internal.bind.util.ISO8601Utils;
+import controller.server.Server;
 import model.DataBase;
 import model.Post;
 import model.User;
@@ -16,6 +17,8 @@ public class Main {
         System.out.println("2. Login");
         System.out.println("3. exit");
 
+        Server server = new Server();
+        DataBase dataBase = new DataBase();
 
         int choice = in.nextInt();
         in.nextLine();
@@ -54,7 +57,6 @@ public class Main {
                         //search for a user in dataBase
                         System.out.println("Enter the name of the user you are looking for: ");
                         String fullName = in.nextLine();
-                        DataBase dataBase = new DataBase();
                         User searchedUser = dataBase.searchUser(fullName);
                         if (searchedUser != null) {
                             searchedUser.displayProfile(searchedUser.getEmail());
@@ -63,7 +65,6 @@ public class Main {
                         }
                     } else if (choice2 == 4) {
                         //show the feed
-                        DataBase dataBase = new DataBase();
                         List<User> followings = dataBase.getFollowings(user.getEmail());
                         if (followings == null) {
                             //print something that user understand
@@ -79,7 +80,6 @@ public class Main {
 
                     } else if(choice2 == 5) {
                         System.out.println("---Your Followings: --- ");
-                        DataBase dataBase = new DataBase();
                         List<User> followings = dataBase.getFollowings(user.getEmail());
                         for (User current : followings)
                             current.displayProfile(current.getEmail());
@@ -88,6 +88,18 @@ public class Main {
                         for (User current2 : followers)
                             current2.displayProfile(current2.getEmail());
                     } else if (choice2 == 6) {
+                        System.out.println("Enter the name of the user you want to send a request to: ");
+                        String fullName = in.nextLine();
+                        User searchedUser = dataBase.searchUser(fullName);
+                        if (searchedUser != null) {
+                            System.out.println("write your request note: ");
+                            String note = in.nextLine();
+
+                            server.sendRequest(user, searchedUser, note);
+                        }
+                    } else if (choice2 == 7) {
+                        server.showRequest(user.getEmail());
+                    } else if (choice2 == 8) {
 
 
                     }
@@ -100,65 +112,83 @@ public class Main {
                 System.out.println("password: ");
                 String password = in.nextLine();
 
-                DataBase dataBase = new DataBase();
                 User user = dataBase.getUser(email);
+                if (user != null) {
+                    boolean checkPass = dataBase.checkPass(email, password);
+                    if (checkPass) {
+                        if (user.logIn()) {
+                            displayMenu();
 
-                if (user.logIn(email, password)) {
-                    displayMenu();
+                            int choice2 = in.nextInt();
+                            in.nextLine();
 
-                    int choice2 = in.nextInt();
-                    in.nextLine();
-
-                    if (choice2 == 1) {
-                        //view profile
-                        viewProfile(user);
-                      } else if (choice2 == 2) {
-                        //create a post
-                        user.createPost();
-                    } else if (choice2 == 3) {
-                        //search for a user in dataBase
-                        System.out.println("Enter the name of the user you are looking for: ");
-                        String fullName = in.nextLine();
-                        User searchedUser = dataBase.searchUser(fullName);
-                        if (searchedUser != null) {
-                            searchedUser.displayProfile(searchedUser.getEmail());
-                            System.out.println("Do you want to follow this user?");
-                            String answer = in.nextLine();
-                            if (answer.contains("Yes")){
-                                followAUser(user, searchedUser);
-                            }
+                            if (choice2 == 1) {
+                                //view profile
+                                viewProfile(user);
+                            } else if (choice2 == 2) {
+                                //create a post
+                                user.createPost();
+                            } else if (choice2 == 3) {
+                                //search for a user in dataBase
+                                System.out.println("Enter the name of the user you are looking for: ");
+                                String fullName = in.nextLine();
+                                User searchedUser = dataBase.searchUser(fullName);
+                                if (searchedUser != null) {
+                                    searchedUser.displayProfile(searchedUser.getEmail());
+                                    System.out.println("Do you want to follow this user?");
+                                    String answer = in.nextLine();
+                                    if (answer.contains("Yes")){
+                                        followAUser(user, searchedUser);
+                                    }
 
 
-                        } else {
-                            System.out.println("model.User not found!");
-                        }
-                    } else if (choice2 == 4) {
-                        //show the feed
-                        List<User> followings = dataBase.getFollowings(user.getEmail());
-                        if (followings == null) {
-                            //print something that user understand
-                            System.out.println("No followings found for this user!");
-                        }else {
-                            for (User following : followings) {
-                                List<Post> posts = dataBase.getPosts(following.getEmail());
-                                for (Post post : posts) {
-                                    post.displayPost();
+                                } else {
+                                    System.out.println("model.User not found!");
                                 }
+                            } else if (choice2 == 4) {
+                                //show the feed
+                                List<User> followings = dataBase.getFollowings(user.getEmail());
+                                if (followings == null) {
+                                    //print something that user understand
+                                    System.out.println("No followings found for this user!");
+                                }else {
+                                    for (User following : followings) {
+                                        List<Post> posts = dataBase.getPosts(following.getEmail());
+                                        for (Post post : posts) {
+                                            post.displayPost();
+                                        }
+                                    }
+                                }
+                            } else if(choice2 == 5) {
+                                System.out.println("---Your Followings: --- ");
+                                List<User> followings = dataBase.getFollowings(user.getEmail());
+                                for (User current : followings)
+                                    current.displayProfile(current.getEmail());
+                                System.out.println("---Your Followers: --- ");
+                                List<User> followers = dataBase.getFollowers(user.getEmail());
+                                for (User current2 : followers)
+                                    current2.displayProfile(current2.getEmail());
+                            } else if (choice2 == 6) {
+                                System.out.println("Enter the name of the user you want to send a request to: ");
+                                String fullName = in.nextLine();
+                                User searchedUser = dataBase.searchUser(fullName);
+                                if (searchedUser != null) {
+                                    System.out.println("write your request note: ");
+                                    String note = in.nextLine();
+
+                                    server.sendRequest(user, searchedUser, note);
+                                }
+                            } else if (choice2 == 7) {
+                                server.showRequest(user.getEmail());
                             }
                         }
                     }
-                     else if(choice2 == 5) {
-                        System.out.println("---Your Followings: --- ");
-                        List<User> followings = dataBase.getFollowings(user.getEmail());
-                        for (User current : followings)
-                            current.displayProfile(current.getEmail());
-                        System.out.println("---Your Followers: --- ");
-                        List<User> followers = dataBase.getFollowers(user.getEmail());
-                        for (User current2 : followers)
-                            current2.displayProfile(current2.getEmail());
+
+                    else {
+                        System.out.println("wrong password! please try again.");
+                        return;
                     }
                 }
-
 
             } else if (choice == 3) {
                 System.exit(0);
@@ -181,18 +211,11 @@ public class Main {
         user.getFollowing().add(searchedUser);
         searchedUser.getFollowers().add(user);
 
-    }
+        //update the dataBase
+        DataBase dataBase = new DataBase();
+        dataBase.updateFollowers(user.getEmail(), user.getFollowers());
+        dataBase.updateFollowings(user.getEmail(), user.getFollowing());
 
-    private static boolean checkPass(String password) {
-        boolean allNumbers = true;
-        for (int i = 0; i < password.length(); i++) {
-            if (!Character.isDigit(password.charAt(i))) {
-                allNumbers = false;
-                break;
-            }
-        }
-
-        return !allNumbers && password.length() >= 8;
     }
 
     //just a simple menu once the user logged in
@@ -204,5 +227,6 @@ public class Main {
         System.out.println("5- show my followers and followings");
         System.out.println("6- send request connection to a user");
         System.out.println("7- show my requests");
+        System.out.println("8- message someone");
     }
 }
