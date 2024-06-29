@@ -7,16 +7,18 @@ public class Post {
     private String text;//3000 char
     private String imageUrl;
     private String videoUrl;
-    private ArrayList<User> likes;
-    private HashMap<User, String> comments ; //each comment mapped to a user
+    private String caption;
+    private HashSet<User> likes;
+    private HashMap<User, ArrayList<String>> comments ; //each comment mapped to a user
     private final String timeStamp ;
 
     public Post(String text) {
         this.text = text;
-        this.likes = new ArrayList<>();
+        this.likes = new HashSet<>();
         this.comments = new HashMap<>();
         this.imageUrl = null;
         this.videoUrl = null;
+        this.caption = null;
         Date d = new Date(); //time of creating the post
         this.timeStamp = d.toString() ;//d is a date but timeStamp is a String
     }
@@ -35,8 +37,10 @@ public class Post {
 
     public void displayComments() {
         //displaying all comments on a single post
-        for (Map.Entry<User, String> set : comments.entrySet()) {
-            System.out.println(set.getKey().getName() + "says: " + set.getValue());
+        for (Map.Entry<User, ArrayList<String>> entry : comments.entrySet()) {
+            User user = entry.getKey();
+            ArrayList<String> comment = entry.getValue();
+            System.out.println(user.getName() + " : " + comment);
         }
     }
 
@@ -61,26 +65,32 @@ public class Post {
     }
 
     public void addComment(User user, String comment){
-        comments.put(user, comment);
+        if(comments.containsKey(user)){
+            comments.get(user).add(comment);
+        }else{
+            ArrayList<String> newComment = new ArrayList<>();
+            newComment.add(comment);
+            comments.put(user, newComment);
+        }
     }
 
     public void likePost(User user){
         likes.add(user);
     }
 
-    public ArrayList<User> getLikes() {
+    public HashSet<User> getLikes() {
         return likes;
     }
 
-    public void setLikes(ArrayList<User> likes) {
+    public void setLikes(HashSet<User> likes) {
         this.likes = likes;
     }
 
-    public HashMap<User, String> getComments() {
+    public HashMap<User, ArrayList<String>> getComments() {
         return comments;
     }
 
-    public void setComments(HashMap<User, String> comments) {
+    public void setComments(HashMap<User, ArrayList<String>> comments) {
         this.comments = comments;
     }
 
@@ -90,5 +100,13 @@ public class Post {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 }

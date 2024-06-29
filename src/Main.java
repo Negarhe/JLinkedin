@@ -237,5 +237,7 @@ public class Main {
         System.out.println("6- send connection request to a user");
         System.out.println("7- show my requests");
         System.out.println("8- message someone");
+        System.out.println("9- comment on a post");
+        System.out.println("10- like a post");
     }
 }
