@@ -125,6 +125,11 @@ public class User {
 
     }
 
+    public void sendMessage(User recipient, String content, DataBase dataBase) {
+        Message message = new Message(this, recipient, content);
+        dataBase.saveMessage(message);
+    }
+
     public void displayProfile(String email) {
         DataBase dataBase = new DataBase();
         User user = dataBase.getUser(email);

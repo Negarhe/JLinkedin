@@ -355,4 +355,22 @@ public class DataBase {
             e.printStackTrace();
         }
     }
+
+    public void saveMessage(Message message) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "INSERT INTO messages (sender, receiver, text) VALUES (?, ?, ?)";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, message.getSender().toString());
+            statement.setString(2, message.getRecipient().toString());
+            statement.setString(3, message.getContent());
+
+
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+      
 }

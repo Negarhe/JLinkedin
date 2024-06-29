@@ -100,7 +100,16 @@ public class Main {
                     } else if (choice2 == 7) {
                         server.showRequest(user.getEmail());
                     } else if (choice2 == 8) {
+                        System.out.println("Enter the name of the user you want to send a message to: ");
+                        String fullName = in.nextLine();
+                        User searchedUser = dataBase.searchUser(fullName);
+                        if (searchedUser != null) {
+                            System.out.println("write your message: ");
+                            String content = in.nextLine();
 
+                            user.sendMessage(searchedUser, content, dataBase);
+
+                        }
 
                     }
 
@@ -225,7 +234,7 @@ public class Main {
         System.out.println("3- search for a user & follow");
         System.out.println("4- show my feed");
         System.out.println("5- show my followers and followings");
-        System.out.println("6- send request connection to a user");
+        System.out.println("6- send connection request to a user");
         System.out.println("7- show my requests");
         System.out.println("8- message someone");
     }

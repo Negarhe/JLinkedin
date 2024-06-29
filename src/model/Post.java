@@ -5,6 +5,8 @@ import java.util.*;
 
 public class Post {
     private String text;//3000 char
+    private String imageUrl;
+    private String videoUrl;
     private ArrayList<User> likes;
     private HashMap<User, String> comments ; //each comment mapped to a user
     private final String timeStamp ;
@@ -13,9 +15,13 @@ public class Post {
         this.text = text;
         this.likes = new ArrayList<>();
         this.comments = new HashMap<>();
+        this.imageUrl = null;
+        this.videoUrl = null;
         Date d = new Date(); //time of creating the post
-        this.timeStamp = d.toString() ;//d is a date but timeStamp is an String
+        this.timeStamp = d.toString() ;//d is a date but timeStamp is a String
     }
+
+
 
     public void displayPost() {
         System.out.println("-----------------------------");
@@ -32,6 +38,22 @@ public class Post {
         for (Map.Entry<User, String> set : comments.entrySet()) {
             System.out.println(set.getKey().getName() + "says: " + set.getValue());
         }
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getTimeStamp() {

@@ -1,5 +1,7 @@
 package controller.server.requests;
 
+import model.User;
+
 public class Request {
     public static class SignupRequest {
         private final String email;
@@ -51,20 +53,93 @@ public class Request {
 
     public static class SearchRequest {
         private final String query;
-        private final String token;
 
-        public SearchRequest(String query, String token) {
+        public SearchRequest(String query) {
             this.query = query;
-            this.token = token;
         }
 
         public String getQuery() {
             return query;
         }
 
-        public String getToken() {
-            return token;
+
+    }
+
+    public static class ShowProfileRequest {
+        private User user;
+
+        public ShowProfileRequest(User user) {
+            this.user = user;
         }
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+    }
+
+    public static class FollowRequest {
+        private User sender;
+        private User receiver;
+
+        public FollowRequest(User sender, User receiver) {
+            this.sender = sender;
+            this.receiver = receiver;
+        }
+
+        public User getSender() {
+            return sender;
+        }
+
+        public void setSender(User sender) {
+            this.sender = sender;
+        }
+
+        public User getReceiver() {
+            return receiver;
+        }
+
+        public void setReceiver(User receiver) {
+            this.receiver = receiver;
+        }
+    }
+
+    public static class ShowFollowersRequest {
+        private String email;
+
+        public ShowFollowersRequest(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
+    public static class ShowFollowingRequest {
+        private String email;
+
+        public ShowFollowingRequest(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
+    public static class createPost{
 
     }
 }
