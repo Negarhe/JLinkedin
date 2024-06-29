@@ -26,6 +26,7 @@ public class Server {
         server.createContext("/showFollowers", new ShowFollowersHandle());
         server.createContext("/showFollowing", new ShowFollowingHandle());
         server.createContext("/post", new postHandler());
+        server.createContext("/showFeed", new showFeedHandler());
 
 
         server.setExecutor(null); // creates a default executor

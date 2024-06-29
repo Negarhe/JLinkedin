@@ -373,4 +373,22 @@ public class DataBase {
         }
     }
 
+    public List<Post> getUserFeed(User user) {
+        List<Post> feed = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            // Get the list of users that the current user is following
+            List<User> followings = getFollowings(user.getEmail());
+
+            // For each user in the followings list, get their posts and add them to the feed
+            for (User following : followings) {
+                List<Post> posts = getPosts(following.getEmail());
+                feed.addAll(posts);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return feed;
+    }
 }

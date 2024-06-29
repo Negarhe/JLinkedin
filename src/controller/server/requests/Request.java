@@ -67,18 +67,48 @@ public class Request {
     }
 
     public static class ShowProfileRequest {
-        private User user;
+        private String email;
+        private String password;
+        private String name;
+        private String lastName;
 
-        public ShowProfileRequest(User user) {
-            this.user = user;
+        public ShowProfileRequest(String email, String password, String name, String lastName) {
+            this.email = email;
+            this.password = password;
+            this.name = name;
+            this.lastName = lastName;
         }
 
-        public User getUser() {
-            return user;
+        public String getEmail() {
+            return email;
         }
 
-        public void setUser(User user) {
-            this.user = user;
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
         }
     }
 
@@ -163,6 +193,22 @@ public class Request {
 
         public void setPost(Post post) {
             this.post = post;
+        }
+    }
+
+    public static class ShowFeedRequest{
+        private User user;
+
+        public ShowFeedRequest(User user) {
+            this.user = user;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
         }
     }
 }

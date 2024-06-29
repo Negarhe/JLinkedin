@@ -5,42 +5,47 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import controller.server.requests.Request;
 import model.DataBase;
+import model.Post;
 import model.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.util.List;
 
-public  class ShowProfileHandle implements HttpHandler {
+public class showFeedHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        // Read the request body
+
+        //read the request body
         InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
         String requestBody = br.readLine();
 
-        // Parse the request body into a ShowProfileRequest object
+        //parse the request body to into a showFeedRequest object
         Gson gson = new Gson();
-        Request.ShowProfileRequest showProfileRequest = gson.fromJson(requestBody, Request.ShowProfileRequest.class);
+        Request.ShowFeedRequest showFeedRequest = gson.fromJson(requestBody, Request.ShowFeedRequest.class);
 
-        // Search for the user in the database
-        DataBase db = new DataBase();
-        User user = db.searchUser(showProfileRequest.getEmail());
+        //search for the user in the database
+        DataBase dataBase = new DataBase();
+        User user = dataBase.searchUser(showFeedRequest.getUser().getEmail());
 
         String response;
-        if (user != null){
-            // If the user is found, return the user's profile as a JSON string
-            response = gson.toJson(user);
+        if (user != null) {
+            // If the user is found, get the user's feed
+            List<Post> feed = dataBase.getUserFeed(user);
+
+            //Convert the feed into a JSON string
+            response = gson.toJson(feed);
+
+            //Send a response back to the client with the JSON string
             exchange.sendResponseHeaders(200, response.length());
         } else {
-            // If the user is not found, return an error message
+            //if the user is not found, return an error message
             response = "User not found";
             exchange.sendResponseHeaders(500, response.length());
         }
 
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+
     }
 }
