@@ -1,6 +1,8 @@
 package controller.server.Handler;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import controller.server.requests.Request;
@@ -18,15 +20,43 @@ public  class ShowProfileHandle implements HttpHandler {
         // Read the request body
         InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
-        String requestBody = br.readLine();
+        StringBuilder requestBodyBuilder = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            requestBodyBuilder.append(line);
+        }
+        String requestBody = requestBodyBuilder.toString();
+
+        System.out.println("Request body: " + requestBody);
+
+        JsonParser parser = new JsonParser();
+        System.out.println("hey");
+        try {
+            parser.parse(requestBody);
+        } catch (JsonSyntaxException e) {
+            System.out.println("Invalid JSON string: " + e.getMessage());
+            return;
+        }
+
+
 
         // Parse the request body into a ShowProfileRequest object
         Gson gson = new Gson();
-        Request.ShowProfileRequest showProfileRequest = gson.fromJson(requestBody, Request.ShowProfileRequest.class);
+        Request.ShowProfileRequest showProfileRequest;
+        try {
+            showProfileRequest = gson.fromJson(requestBody, Request.ShowProfileRequest.class);
+        } catch (JsonSyntaxException e) {
+            System.out.println("Invalid JSON string: " + e.getMessage());
+            return;
+        }
+
+        System.out.println("ShowProfileRequest: " + showProfileRequest);
 
         // Search for the user in the database
         DataBase db = new DataBase();
-        User user = db.searchUser(showProfileRequest.getEmail());
+        User user = db.searchUserInDataBase(showProfileRequest.getUser().getEmail(), showProfileRequest.getUser().getPassword());
+
+        System.out.println("User: " + user);
 
         String response;
         if (user != null){
