@@ -1,9 +1,9 @@
 package controller.server.Handler;
+import controller.server.requests.Request;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import controller.server.requests.Request;
+import com.google.gson.Gson;
 import model.DataBase;
 import model.User;
 
@@ -11,36 +11,41 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.List;
 
-public class LoginHandle implements HttpHandler {
+public class ShowFollowingHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-
-        // This is where you handle the /login endpoint.
-        // Read the request body
+        // Step 1: Read the request body
         InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
         String requestBody = br.readLine();
 
-        // Parse the request body into a LoginRequest object
+        // Step 2: Parse the request body into a ShowFollowingRequest object
         Gson gson = new Gson();
-        Request.LoginRequest loginRequest = gson.fromJson(requestBody, Request.LoginRequest.class);
+        Request.ShowFollowingRequest showFollowingRequest = gson.fromJson(requestBody, Request.ShowFollowingRequest.class);
+
+        // Step 3: Search the user in the database
         DataBase db = new DataBase();
-        User user = db.searchUserInDataBase(loginRequest.getEmail(), loginRequest.getPassword());
-        boolean success = user.logIn();
+        User user = db.searchUser(showFollowingRequest.getEmail());
 
         String response;
-        if (success){
-            response = "Logged in successfully";
+        if (user != null) {
+            // Step 4: Get the list of users they are following
+            List<User> followingUsers = user.getFollowing();
+
+            // Step 5: Convert the list of following users into a JSON string
+            response = gson.toJson(followingUsers);
+
+            // Step 6: Send the JSON string as the response
             exchange.sendResponseHeaders(200, response.length());
         } else {
-            response = "Failed to log in";
+            response = "User not found";
             exchange.sendResponseHeaders(500, response.length());
         }
+
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
     }
-
-
 }

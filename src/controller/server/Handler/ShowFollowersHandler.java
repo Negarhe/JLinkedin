@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import model.User;
 
-public class ShowFollowersHandle implements HttpHandler {
+public class ShowFollowersHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         // This is where you handle the /showFollowers endpoint.

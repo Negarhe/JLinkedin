@@ -18,13 +18,13 @@ public class Server {
     public static void main(String[] args) throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress(8085), 0);
 
-        server.createContext("/signup", new SignupHandle());
-        server.createContext("/login", new LoginHandle());
-        server.createContext("/search", new SearchHandle());
-        server.createContext("/showProfile", new ShowProfileHandle());
-        server.createContext("/follow", new FollowHandle());
-        server.createContext("/showFollowers", new ShowFollowersHandle());
-        server.createContext("/showFollowing", new ShowFollowingHandle());
+        server.createContext("/signup", new SignupHandler());
+        server.createContext("/login", new LoginHandler());
+        server.createContext("/search", new SearchHandler());
+        server.createContext("/showProfile", new ShowProfileHandler());
+        server.createContext("/follow", new FollowHandler());
+        server.createContext("/showFollowers", new ShowFollowersHandler());
+        server.createContext("/showFollowing", new ShowFollowingHandler());
         server.createContext("/post", new postHandler());
         server.createContext("/showFeed", new showFeedHandler());
 

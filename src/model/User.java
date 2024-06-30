@@ -1,8 +1,15 @@
 package model;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.*;
 
-public class User {
+public class User implements Serializable {
 
     public enum Status {
         SEEKING_JOB, HIRING, PROVIDING_SERVICES
@@ -430,4 +437,6 @@ public class User {
         this.educations = educations;
     }
 
+
 }
+

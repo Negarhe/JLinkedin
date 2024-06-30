@@ -1,6 +1,7 @@
 package controller.server.Handler;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
@@ -8,13 +9,14 @@ import com.sun.net.httpserver.HttpHandler;
 import controller.server.requests.Request;
 import model.DataBase;
 import model.User;
+import model.UserSerializer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-public  class ShowProfileHandle implements HttpHandler {
+public  class ShowProfileHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         // Read the request body
@@ -27,17 +29,14 @@ public  class ShowProfileHandle implements HttpHandler {
         }
         String requestBody = requestBodyBuilder.toString();
 
-        System.out.println("Request body: " + requestBody);
 
         JsonParser parser = new JsonParser();
-        System.out.println("hey");
         try {
             parser.parse(requestBody);
         } catch (JsonSyntaxException e) {
             System.out.println("Invalid JSON string: " + e.getMessage());
             return;
         }
-
 
 
         // Parse the request body into a ShowProfileRequest object
@@ -50,19 +49,24 @@ public  class ShowProfileHandle implements HttpHandler {
             return;
         }
 
-        System.out.println("ShowProfileRequest: " + showProfileRequest);
 
         // Search for the user in the database
         DataBase db = new DataBase();
-        User user = db.searchUserInDataBase(showProfileRequest.getUser().getEmail(), showProfileRequest.getUser().getPassword());
+        User user = db.searchUserInDataBase(showProfileRequest.getEmail(), showProfileRequest.getPassword());
 
-        System.out.println("User: " + user);
 
-        String response;
+        String response = "";
         if (user != null){
             // If the user is found, return the user's profile as a JSON string
-            response = gson.toJson(user);
-            exchange.sendResponseHeaders(200, response.length());
+            try {
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(User.class, new UserSerializer());
+                Gson customGson = gsonBuilder.create();
+                response = customGson.toJson(user);
+                exchange.sendResponseHeaders(200, response.length());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         } else {
             // If the user is not found, return an error message
             response = "User not found";
@@ -70,6 +74,7 @@ public  class ShowProfileHandle implements HttpHandler {
         }
 
         OutputStream os = exchange.getResponseBody();
+        System.out.println("response: " + response);
         os.write(response.getBytes());
         os.close();
     }

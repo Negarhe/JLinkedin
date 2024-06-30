@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-public class FollowHandle implements HttpHandler {
+public class FollowHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         // Read the request body
