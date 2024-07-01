@@ -93,27 +93,27 @@ public class Request {
     }
 
     public static class FollowRequest {
-        private User sender;
-        private User receiver;
+        private String sender;
+        private String receiver;
 
-        public FollowRequest(User sender, User receiver) {
+        public FollowRequest(String sender, String receiver) {
             this.sender = sender;
             this.receiver = receiver;
         }
 
-        public User getSender() {
+        public String getSender() {
             return sender;
         }
 
-        public void setSender(User sender) {
+        public void setSender(String sender) {
             this.sender = sender;
         }
 
-        public User getReceiver() {
+        public String getReceiver() {
             return receiver;
         }
 
-        public void setReceiver(User receiver) {
+        public void setReceiver(String receiver) {
             this.receiver = receiver;
         }
     }

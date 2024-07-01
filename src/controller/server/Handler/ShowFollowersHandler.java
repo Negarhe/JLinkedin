@@ -16,27 +16,51 @@ public class ShowFollowersHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         // This is where you handle the /showFollowers endpoint.
         // Read the request body
-        InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
-        BufferedReader br = new BufferedReader(isr);
-        String requestBody = br.readLine();
+        try {
+            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder requestBodyBuilder = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                requestBodyBuilder.append(line);
+            }
+            String requestBody = requestBodyBuilder.toString();
 
-        // Parse the request body into a ShowFollowersRequest object
-         Gson gson = new Gson();
-         Request.ShowFollowersRequest showFollowersRequest = gson.fromJson(requestBody, Request.ShowFollowersRequest.class);
-         DataBase db = new DataBase();
-         User user = db.searchUser(showFollowersRequest.getEmail());
-         boolean success = user != null;
+            // Parse the request body into a ShowFollowersRequest object
+            Gson gson = new Gson();
+            Request.ShowFollowersRequest showFollowersRequest = gson.fromJson(requestBody, Request.ShowFollowersRequest.class);
+            DataBase db = new DataBase();
+            User user = db.searchUserWithEmail(showFollowersRequest.getEmail());
 
-         String response;
-         if (success){
-             response = "User found";
-             exchange.sendResponseHeaders(200, response.length());
-         } else {
-             response = "User not found";
-             exchange.sendResponseHeaders(500, response.length());
-         }
-         OutputStream os = exchange.getResponseBody();
-         os.write(response.getBytes());
-         os.close();
+            String response;
+            if (user == null) {
+                response = "user not found";
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+                return;
+            }
+
+            //get followers from dataBase and show them as a json
+            DataBase dataBase = new DataBase();
+            if (dataBase.getFollowersFromDataBase(user.getEmail()) == null) {
+                response = "No followers found";
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+                return;
+            }
+
+            response = dataBase.getFollowersFromDataBase(user.getEmail());
+            System.out.println(response);
+            exchange.sendResponseHeaders(200, response.length());
+
+
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

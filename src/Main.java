@@ -222,8 +222,8 @@ public class Main {
 
         //update the dataBase
         DataBase dataBase = new DataBase();
-        dataBase.updateFollowers(user.getEmail(), user.getFollowers());
-        dataBase.updateFollowings(user.getEmail(), user.getFollowing());
+        dataBase.updateFollowers(user.getEmail(), searchedUser);
+        dataBase.updateFollowings(searchedUser.getEmail(), user);
 
     }
 

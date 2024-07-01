@@ -11,6 +11,7 @@ import java.util.*;
 
 public class User implements Serializable {
 
+
     public enum Status {
         SEEKING_JOB, HIRING, PROVIDING_SERVICES
     }
@@ -37,9 +38,6 @@ public class User implements Serializable {
 
     private ArrayList<Job> experiences; //from the oldest to the latest
     private ArrayList<Education> educations; //from the oldest to the latest
-
-    private Scanner scanner = new Scanner(System.in);
-
 
     /**
      * constructor = sign up method
@@ -167,121 +165,121 @@ public class User implements Serializable {
     }
 
     public void editProfile() {
-        DataBase dataBase = new DataBase();
-        System.out.println("What do you want to edit?");
-        System.out.println("1. Title");
-        System.out.println("2. Additional name");
-        System.out.println("3. City");
-        System.out.println("4. Country");
-        System.out.println("5. Contact information");
-        System.out.println("6. Profession");
-        System.out.println("7. Status");
-        System.out.println("8. Experiences");
-        System.out.println("9. Educations");
-        System.out.println("10. Profile photo");
-        System.out.println("11. Background photo");
-        System.out.println("12. none");
-
-        int choice = 0;
-        while (choice != 12) {
-            choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1:
-                    System.out.println("Enter the new title: ");
-                    this.setTitle(scanner.nextLine());
-                    //set title in dataBase
-                    dataBase.updateUserTitle(this.getEmail(), this.getTitle());
-                    break;
-                case 2:
-                    System.out.println("Enter the new additional name: ");
-                    this.setAdditionalName(scanner.nextLine());
-                    //set additionalName in dataBase
-                    dataBase.updateUserAdditionalName(this.getEmail(), this.getAdditionalName());
-                    break;
-                case 3:
-                    System.out.println("Enter the new city: ");
-                    this.setCity(scanner.nextLine());
-                    //set city in dataBase
-                    dataBase.updateUserCity(this.getEmail(), this.getCity());
-                    break;
-                case 4:
-                    System.out.println("Enter the new country: ");
-                    this.setCountry(scanner.nextLine());
-                    //set country in dataBase
-                    dataBase.updateUserCountry(this.getEmail(), this.getCountry());
-                    break;
-                case 5:
-                    System.out.println("Enter the new contact information: ");
-                    System.out.println("Phone number: ");
-                    String phoneNumber = scanner.nextLine();
-                    System.out.println("Kind: ");
-                    System.out.println("1. Mobile");
-                    System.out.println("2. Home");
-                    System.out.println("3. Work");
-                    int kindChoice = scanner.nextInt();
-                    scanner.nextLine();
-                    ContactInformation.Kind kind = ContactInformation.Kind.MOBILE;
-                    switch (kindChoice) {
-                        case 1:
-                            kind = ContactInformation.Kind.MOBILE;
-                            break;
-                        case 2:
-                            kind = ContactInformation.Kind.HOME;
-                            break;
-                        case 3:
-                            kind = ContactInformation.Kind.JOB;
-                            break;
-                    }
-                    System.out.println("Address: ");
-                    String address = scanner.nextLine();
-                    System.out.println("Birthday: ");
-                    String birthday = scanner.nextLine();
-                    System.out.println("Relationship status: ");
-                    String relationshipStatus = scanner.nextLine();
-                    this.setContactInfo(new ContactInformation(this.email, phoneNumber, kind, address, birthday, relationshipStatus));
-                    //set contactInfo in dataBase
-                    dataBase.updateUserContactInfo(this.getEmail(), this.getContactInfo());
-                    break;
-                case 6:
-                    System.out.println("Enter the new profession: ");
-                    this.setProfession(scanner.nextLine());
-                    //set profession in dataBase
-                    dataBase.updateUserProfession(this.getEmail(), this.getProfession());
-                    break;
-                case 7:
-                    System.out.println("Enter the new status: ");
-                    System.out.println("1. Seeking job");
-                    System.out.println("2. Hiring");
-                    System.out.println("3. Providing services");
-                    int statusChoice = scanner.nextInt();
-                    scanner.nextLine();
-                    switch (statusChoice) {
-                        case 1:
-                            this.setStatus(Status.SEEKING_JOB);
-                            break;
-                        case 2:
-                            this.setStatus(Status.HIRING);
-                            break;
-                        case 3:
-                            this.setStatus(Status.PROVIDING_SERVICES);
-                            break;
-                    }
-                    //set status in dataBase
-                    dataBase.updateUserStatus(this.getEmail(), this.getStatus().toString());
-            }
-        }
+//        DataBase dataBase = new DataBase();
+//        System.out.println("What do you want to edit?");
+//        System.out.println("1. Title");
+//        System.out.println("2. Additional name");
+//        System.out.println("3. City");
+//        System.out.println("4. Country");
+//        System.out.println("5. Contact information");
+//        System.out.println("6. Profession");
+//        System.out.println("7. Status");
+//        System.out.println("8. Experiences");
+//        System.out.println("9. Educations");
+//        System.out.println("10. Profile photo");
+//        System.out.println("11. Background photo");
+//        System.out.println("12. none");
+//
+//        int choice = 0;
+//        while (choice != 12) {
+//            choice = scanner.nextInt();
+//            scanner.nextLine();
+//
+//            switch (choice) {
+//                case 1:
+//                    System.out.println("Enter the new title: ");
+//                    this.setTitle(scanner.nextLine());
+//                    //set title in dataBase
+//                    dataBase.updateUserTitle(this.getEmail(), this.getTitle());
+//                    break;
+//                case 2:
+//                    System.out.println("Enter the new additional name: ");
+//                    this.setAdditionalName(scanner.nextLine());
+//                    //set additionalName in dataBase
+//                    dataBase.updateUserAdditionalName(this.getEmail(), this.getAdditionalName());
+//                    break;
+//                case 3:
+//                    System.out.println("Enter the new city: ");
+//                    this.setCity(scanner.nextLine());
+//                    //set city in dataBase
+//                    dataBase.updateUserCity(this.getEmail(), this.getCity());
+//                    break;
+//                case 4:
+//                    System.out.println("Enter the new country: ");
+//                    this.setCountry(scanner.nextLine());
+//                    //set country in dataBase
+//                    dataBase.updateUserCountry(this.getEmail(), this.getCountry());
+//                    break;
+//                case 5:
+//                    System.out.println("Enter the new contact information: ");
+//                    System.out.println("Phone number: ");
+//                    String phoneNumber = scanner.nextLine();
+//                    System.out.println("Kind: ");
+//                    System.out.println("1. Mobile");
+//                    System.out.println("2. Home");
+//                    System.out.println("3. Work");
+//                    int kindChoice = scanner.nextInt();
+//                    scanner.nextLine();
+//                    ContactInformation.Kind kind = ContactInformation.Kind.MOBILE;
+//                    switch (kindChoice) {
+//                        case 1:
+//                            kind = ContactInformation.Kind.MOBILE;
+//                            break;
+//                        case 2:
+//                            kind = ContactInformation.Kind.HOME;
+//                            break;
+//                        case 3:
+//                            kind = ContactInformation.Kind.JOB;
+//                            break;
+//                    }
+//                    System.out.println("Address: ");
+//                    String address = scanner.nextLine();
+//                    System.out.println("Birthday: ");
+//                    String birthday = scanner.nextLine();
+//                    System.out.println("Relationship status: ");
+//                    String relationshipStatus = scanner.nextLine();
+//                    this.setContactInfo(new ContactInformation(this.email, phoneNumber, kind, address, birthday, relationshipStatus));
+//                    //set contactInfo in dataBase
+//                    dataBase.updateUserContactInfo(this.getEmail(), this.getContactInfo());
+//                    break;
+//                case 6:
+//                    System.out.println("Enter the new profession: ");
+//                    this.setProfession(scanner.nextLine());
+//                    //set profession in dataBase
+//                    dataBase.updateUserProfession(this.getEmail(), this.getProfession());
+//                    break;
+//                case 7:
+//                    System.out.println("Enter the new status: ");
+//                    System.out.println("1. Seeking job");
+//                    System.out.println("2. Hiring");
+//                    System.out.println("3. Providing services");
+//                    int statusChoice = scanner.nextInt();
+//                    scanner.nextLine();
+//                    switch (statusChoice) {
+//                        case 1:
+//                            this.setStatus(Status.SEEKING_JOB);
+//                            break;
+//                        case 2:
+//                            this.setStatus(Status.HIRING);
+//                            break;
+//                        case 3:
+//                            this.setStatus(Status.PROVIDING_SERVICES);
+//                            break;
+//                    }
+//                    //set status in dataBase
+//                    dataBase.updateUserStatus(this.getEmail(), this.getStatus().toString());
+//            }
+//        }
     }
 
 
     public void createPost() {
-        System.out.println("Enter the content of your post: ");
-        String content = scanner.nextLine();
-        Post post = new Post(content);
-        this.getPosts().add(post);
-        DataBase dataBase = new DataBase();
-        dataBase.insertPost(this.getEmail(), post);
+//        System.out.println("Enter the content of your post: ");
+//        String content = scanner.nextLine();
+//        Post post = new Post(content);
+//        this.getPosts().add(post);
+//        DataBase dataBase = new DataBase();
+//        dataBase.insertPost(this.getEmail(), post);
     }
 
 

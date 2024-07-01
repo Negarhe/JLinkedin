@@ -19,15 +19,19 @@ public class ShowFollowingHandler implements HttpHandler {
         // Step 1: Read the request body
         InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
         BufferedReader br = new BufferedReader(isr);
-        String requestBody = br.readLine();
-
+        StringBuilder requestBodyBuilder = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            requestBodyBuilder.append(line);
+        }
+        String requestBody = requestBodyBuilder.toString();
         // Step 2: Parse the request body into a ShowFollowingRequest object
         Gson gson = new Gson();
         Request.ShowFollowingRequest showFollowingRequest = gson.fromJson(requestBody, Request.ShowFollowingRequest.class);
 
         // Step 3: Search the user in the database
         DataBase db = new DataBase();
-        User user = db.searchUser(showFollowingRequest.getEmail());
+        User user = db.searchUserWithEmail(showFollowingRequest.getEmail());
 
         String response;
         if (user != null) {

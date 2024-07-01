@@ -1,5 +1,9 @@
 package model;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -324,36 +328,101 @@ public class DataBase {
         return null;
     }
 
-    public void updateFollowers(String email, ArrayList<User> followers) {
+    public boolean updateFollowers(String email, User follower) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "INSERT INTO followers (user_email, follower_email) VALUES (?, ?)";
 
-            for (User follower : followers) {
-                PreparedStatement statement = conn.prepareStatement(query);
-                statement.setString(1, email);
-                statement.setString(2, follower.getEmail());
+            // Get the current followers of the user
+            String selectQuery = "SELECT followers FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
 
-                statement.executeUpdate();
+
+
+            // Parse the followers from the JSON string
+            ArrayList<User> followers = new ArrayList<>();
+            if (resultSet.next()) {
+                String followersJson = resultSet.getString("followers");
+                if (followersJson != null && !followersJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<User>>(){}.getType();
+                    followers = gson.fromJson(followersJson, type);
+                }
             }
+
+            for (User user : followers) {
+                if (user.getEmail().equals(follower.getEmail())){
+                    System.out.println("You are already following this user!");
+                    return false;
+                }
+            }
+
+            // Add the new follower user to the list
+            followers.add(follower);
+
+            // Convert the followers list back to a JSON string
+            Gson gson = new Gson();
+            String followersJson = gson.toJson(followers);
+
+            // Update the followers in the database
+            String updateQuery = "UPDATE users SET followers = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, followersJson);
+            updateStatement.setString(2, email);
+            updateStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
-    public void updateFollowings(String email, ArrayList<User> following) {
+    public boolean updateFollowings(String email, User following) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "INSERT INTO followings (user_email, following_email) VALUES (?, ?)";
+            // Get the current followings of the user
+            String selectQuery = "SELECT following FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
 
-            for (User follow : following) {
-                PreparedStatement statement = conn.prepareStatement(query);
-                statement.setString(1, email);
-                statement.setString(2, follow.getEmail());
-
-                statement.executeUpdate();
+            // Parse the followings from the JSON string
+            ArrayList<User> followings = new ArrayList<>();
+            if (resultSet.next()) {
+                String followingJson = resultSet.getString("following");
+                if (followingJson != null && !followingJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<User>>(){}.getType();
+                    followings = gson.fromJson(followingJson, type);
+                }
             }
+
+            for (User user : followings) {
+                if (user.getEmail().equals(following.getEmail())) {
+                    System.out.println("You are already following this user!");
+                    return false;
+                }
+            }
+
+            // Add the new following user to the list
+            followings.add(following);
+
+            // Convert the followings list back to a JSON string
+            Gson gson = new Gson();
+            String followingJson = gson.toJson(followings);
+
+            // Update the followings in the database
+            String updateQuery = "UPDATE users SET following = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, followingJson);
+            updateStatement.setString(2, email);
+            updateStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     public void saveMessage(Message message) {
@@ -392,4 +461,42 @@ public class DataBase {
         return feed;
     }
 
+    public User searchUserWithEmail(String sender) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM users WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, sender);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new User(resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String getFollowersFromDataBase(String email) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT followers FROM users WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("followers");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
