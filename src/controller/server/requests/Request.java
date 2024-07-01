@@ -151,20 +151,20 @@ public class Request {
     }
 
     public static class createPost{
-        private User user;
+        private String email;
         private Post post;
 
-        public createPost(User user, Post post) {
-            this.user = user;
+        public createPost(String email, Post post) {
+            this.email = email;
             this.post = post;
         }
 
-        public User getUser() {
-            return user;
+        public String getEmail() {
+            return email;
         }
 
-        public void setUser(User user) {
-            this.user = user;
+        public void setEmail(String email) {
+            this.email = email;
         }
 
         public Post getPost() {
@@ -177,18 +177,54 @@ public class Request {
     }
 
     public static class ShowFeedRequest{
-        private User user;
+        private String email;
 
-        public ShowFeedRequest(User user) {
-            this.user = user;
+        public ShowFeedRequest(String email) {
+            this.email = email;
         }
 
-        public User getUser() {
-            return user;
+        public String getEmail() {
+            return email;
         }
 
-        public void setUser(User user) {
-            this.user = user;
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
+    public static class SendConnectionRequest {
+        private String senderEmail;
+        private String receiverEmail;
+        private String connectionNote;
+
+        public SendConnectionRequest(String senderEmail, String receiverEmail, String connectionNote) {
+            this.senderEmail = senderEmail;
+            this.receiverEmail = receiverEmail;
+            this.connectionNote = connectionNote;
+        }
+
+        public String getSenderEmail() {
+            return senderEmail;
+        }
+
+        public void setSenderEmail(String senderEmail) {
+            this.senderEmail = senderEmail;
+        }
+
+        public String getReceiverEmail() {
+            return receiverEmail;
+        }
+
+        public void setReceiverEmail(String receiverEmail) {
+            this.receiverEmail = receiverEmail;
+        }
+
+        public String getConnectionNote() {
+            return connectionNote;
+        }
+
+        public void setConnectionNote(String connectionNote) {
+            this.connectionNote = connectionNote;
         }
     }
 }

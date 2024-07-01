@@ -273,13 +273,11 @@ public class User implements Serializable {
     }
 
 
-    public void createPost() {
-//        System.out.println("Enter the content of your post: ");
-//        String content = scanner.nextLine();
-//        Post post = new Post(content);
-//        this.getPosts().add(post);
-//        DataBase dataBase = new DataBase();
-//        dataBase.insertPost(this.getEmail(), post);
+    public void createPost(String content, String imageUrl, String videoUrl, String caption) {
+        Post post = new Post(content, imageUrl, videoUrl, caption);
+        this.getPosts().add(post);
+        DataBase dataBase = new DataBase();
+        dataBase.insertPost(this.getEmail(), post);
     }
 
 

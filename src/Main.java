@@ -52,7 +52,7 @@ public class Main {
 
                     } else if (choice2 == 2) {
                         //create a post
-                        user.createPost();
+//                        user.createPost();
                     } else if (choice2 == 3) {
                         //search for a user in dataBase
                         System.out.println("Enter the name of the user you are looking for: ");
@@ -84,9 +84,9 @@ public class Main {
                         for (User current : followings)
                             current.displayProfile(current.getEmail());
                         System.out.println("---Your Followers: --- ");
-                        List<User> followers = dataBase.getFollowers(user.getEmail());
-                        for (User current2 : followers)
-                            current2.displayProfile(current2.getEmail());
+//                        List<User> followers = dataBase.getFollowers(user.getEmail());
+//                        for (User current2 : followers)
+//                            current2.displayProfile(current2.getEmail());
                     } else if (choice2 == 6) {
                         System.out.println("Enter the name of the user you want to send a request to: ");
                         String fullName = in.nextLine();
@@ -136,7 +136,7 @@ public class Main {
                                 viewProfile(user);
                             } else if (choice2 == 2) {
                                 //create a post
-                                user.createPost();
+//                                user.createPost();
                             } else if (choice2 == 3) {
                                 //search for a user in dataBase
                                 System.out.println("Enter the name of the user you are looking for: ");
@@ -174,9 +174,9 @@ public class Main {
                                 for (User current : followings)
                                     current.displayProfile(current.getEmail());
                                 System.out.println("---Your Followers: --- ");
-                                List<User> followers = dataBase.getFollowers(user.getEmail());
-                                for (User current2 : followers)
-                                    current2.displayProfile(current2.getEmail());
+//                                List<User> followers = dataBase.getFollowers(user.getEmail());
+//                                for (User current2 : followers)
+//                                    current2.displayProfile(current2.getEmail());
                             } else if (choice2 == 6) {
                                 System.out.println("Enter the name of the user you want to send a request to: ");
                                 String fullName = in.nextLine();

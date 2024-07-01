@@ -6,6 +6,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -87,10 +89,20 @@ public class DataBase {
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return new User(resultSet.getString("email"),
+                ArrayList<Post> posts = new ArrayList<>();
+                String postsJson = resultSet.getString("posts");
+                if (postsJson != null && !postsJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Post>>(){}.getType();
+                    posts = gson.fromJson(postsJson, type);
+                }
+
+                User user = new User(resultSet.getString("email"),
                         resultSet.getString("name"),
                         resultSet.getString("lastName"),
                         resultSet.getString("password"));
+                user.setPosts(posts);
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -228,16 +240,42 @@ public class DataBase {
 
     public void insertPost(String email, Post post) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "INSERT INTO posts (email, text) VALUES (?, ?)";
+            // Get the current posts of the user
+            String selectQuery = "SELECT posts FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
 
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, email);
-            statement.setString(2, post.getText());
+            // Parse the posts from the JSON string
+            ArrayList<Post> posts = new ArrayList<>();
+            if (resultSet.next()) {
+                String postsJson = resultSet.getString("posts");
+                if (postsJson != null && !postsJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Post>>(){}.getType();
+                    posts = gson.fromJson(postsJson, type);
+                }
+            }
 
-            statement.executeUpdate();
+            // Add the new post to the list
+
+            if (posts == null){
+                posts = new ArrayList<>();
+            }
+            posts.add(post);
+
+            // Convert the posts list back to a JSON string
+            Gson gson = new Gson();
+            String postsJson = gson.toJson(posts);
+
+            // Update the posts in the database
+            String updateQuery = "UPDATE users SET posts = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, postsJson);
+            updateStatement.setString(2, email);
+            updateStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -246,15 +284,18 @@ public class DataBase {
         List<User> followings = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "SELECT * FROM followings WHERE user_email = ?";
+            String selectQuery = "SELECT following FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
 
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, email);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                User following = getUser(resultSet.getString("following_email"));
-                followings.add(following);
+            if (resultSet.next()) {
+                String followingJson = resultSet.getString("following");
+                if (followingJson != null && !followingJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<User>>(){}.getType();
+                    followings = gson.fromJson(followingJson, type);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -274,7 +315,8 @@ public class DataBase {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Post post = new Post(resultSet.getString("text"));
+                Post post = new Post(resultSet.getString("text"), resultSet.getString("imageUrl"),
+                        resultSet.getString("videoUrl"),resultSet.getString("caption"));
                 posts.add(post);
             }
         } catch (SQLException e) {
@@ -283,28 +325,6 @@ public class DataBase {
 
         return posts;
     }
-
-    public List<User> getFollowers(String email) {
-        List<User> followers = new ArrayList<>();
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "SELECT * FROM followers WHERE user_email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, email);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                User follower = getUser(resultSet.getString("follower_email"));
-                followers.add(follower);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return followers;
-    }
-
 
     public User searchUserInDataBase(String email, String password) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -448,12 +468,20 @@ public class DataBase {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             // Get the list of users that the current user is following
             List<User> followings = getFollowings(user.getEmail());
-
+            System.out.println(followings.get(0).getEmail());
             // For each user in the followings list, get their posts and add them to the feed
             for (User following : followings) {
-                List<Post> posts = getPosts(following.getEmail());
+                User user1 = getUser(following.getEmail());
+                List<Post> posts = user1.getPosts();
                 feed.addAll(posts);
             }
+
+            System.out.println(feed);
+
+//            Collections.sort(feed, (p1, p2) -> p2.getTimestamp().compareTo(p1.getTimestamp());
+            // convert timestamp string to timestamp object
+            // sort the posts by timestamp
+            feed.sort((p1, p2) -> p2.getTimeStamp().compareTo(p1.getTimeStamp()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -498,5 +526,44 @@ public class DataBase {
         }
 
         return null;
+    }
+
+
+    public void insertConnectionRequest(Connect connect) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            // Get the current connections of the user
+            String selectQuery = "SELECT connection FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, connect.getSender());
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            // Parse the connections from the JSON string
+            ArrayList<Connect> connections = new ArrayList<>();
+            if (resultSet.next()) {
+                String connectionsJson = resultSet.getString("connection");
+                if (connectionsJson != null && !connectionsJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Connect>>(){}.getType();
+                    connections = gson.fromJson(connectionsJson, type);
+                }
+            }
+
+            // Add the new connection to the list
+            connections.add(connect);
+
+            // Convert the connections list back to a JSON string
+            Gson gson = new Gson();
+            String connectionsJson = gson.toJson(connections);
+
+            // Update the connections in the database
+            String updateQuery = "UPDATE users SET connection = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, connectionsJson);
+            updateStatement.setString(2, connect.getSender());
+            updateStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

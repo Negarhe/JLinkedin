@@ -10,19 +10,27 @@ public class Post {
     private String caption;
     private HashSet<User> likes;
     private HashMap<User, ArrayList<String>> comments ; //each comment mapped to a user
-    private final String timeStamp ;
+    private final Date timeStamp ;
 
-    public Post(String text) {
+    public Post(String text, String imageUrl, String videoUrl, String caption) {
         this.text = text;
         this.likes = new HashSet<>();
         this.comments = new HashMap<>();
-        this.imageUrl = null;
-        this.videoUrl = null;
-        this.caption = null;
-        Date d = new Date(); //time of creating the post
-        this.timeStamp = d.toString() ;//d is a date but timeStamp is a String
+        this.imageUrl = imageUrl;
+        this.videoUrl = videoUrl;
+        this.caption = caption;
+        this.timeStamp = new Date() ;//d is a date but timeStamp is a String
     }
 
+    public Post(Post post) {
+        this.text = post.getText();
+        this.likes = post.getLikes();
+        this.comments = post.getComments();
+        this.imageUrl = post.getImageUrl();
+        this.videoUrl = post.getVideoUrl();
+        this.caption = post.getCaption();
+        this.timeStamp = new Date();//d is a date but timeStamp is a String
+    }
 
 
     public void displayPost() {
@@ -60,7 +68,7 @@ public class Post {
         this.imageUrl = imageUrl;
     }
 
-    public String getTimeStamp() {
+    public Date getTimeStamp() {
         return timeStamp;
     }
 
