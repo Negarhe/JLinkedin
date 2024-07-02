@@ -28,6 +28,7 @@ public class Server {
         server.createContext("/post", new postHandler());
         server.createContext("/showFeed", new showFeedHandler());
         server.createContext("/sendConnectionRequest", new SendConnectionRequestHandler());
+        server.createContext("/showConnectionRequests", new ShowConnectionRequestsHandler());
 
         server.setExecutor(null); // creates a default executor
         server.start();

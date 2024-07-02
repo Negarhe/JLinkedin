@@ -548,6 +548,12 @@ public class DataBase {
                 }
             }
 
+            for (Connect connection : connections) {
+                if (connection.getSender().equals(connect.getSender())) {
+                    return;
+                }
+            }
+
             // Add the new connection to the list
             connections.add(connect);
 
@@ -565,5 +571,33 @@ public class DataBase {
             e.printStackTrace();
         }
 
+    }
+
+    public ArrayList<User> getConnectionRequests(String email) {
+        ArrayList<User> connectionRequests = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String selectQuery = "SELECT connection FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String connectionJson = resultSet.getString("connection");
+                if (connectionJson != null && !connectionJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Connect>>(){}.getType();
+                    ArrayList<Connect> connections = gson.fromJson(connectionJson, type);
+
+                    for (Connect connect : connections) {
+                        User user = searchUserWithEmail(connect.getReceiver());
+                        connectionRequests.add(user);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connectionRequests;
     }
 }
