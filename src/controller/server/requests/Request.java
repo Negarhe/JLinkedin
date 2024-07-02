@@ -244,4 +244,50 @@ public class Request {
             this.email = email;
         }
     }
+
+    public static class UpdateProfile {
+        private String partToEdit;
+        private String email;
+        private String password;
+        private String newValue;
+
+        public UpdateProfile(String email, String password, String partToEdit, String newValue) {
+            this.email = email;
+            this.password = password;
+            this.partToEdit = partToEdit;
+            this.newValue = newValue;
+        }
+
+        public String getNewValue() {
+            return newValue;
+        }
+
+        public void setNewValue(String newValue) {
+            this.newValue = newValue;
+        }
+
+        public String getPartToEdit() {
+            return partToEdit;
+        }
+
+        public void setPartToEdit(String partToEdit) {
+            this.partToEdit = partToEdit;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
 }

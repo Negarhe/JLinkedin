@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.*;
 
 public class Post {
+    private String id;
     private String text;//3000 char
     private String imageUrl;
     private String videoUrl;
@@ -20,6 +21,15 @@ public class Post {
         this.videoUrl = videoUrl;
         this.caption = caption;
         this.timeStamp = new Date() ;//d is a date but timeStamp is a String
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Post(Post post) {

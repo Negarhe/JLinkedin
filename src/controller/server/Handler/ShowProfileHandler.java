@@ -15,12 +15,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public  class ShowProfileHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         // Read the request body
-        InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
+        InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
         BufferedReader br = new BufferedReader(isr);
         StringBuilder requestBodyBuilder = new StringBuilder();
         String line;

@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import controller.server.Server;
 import model.Connect;
 import model.DataBase;
 import model.User;
@@ -14,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class SendConnectionRequestHandler implements HttpHandler {
     @Override
@@ -21,7 +21,7 @@ public class SendConnectionRequestHandler implements HttpHandler {
         // Read the request body
 
         try {
-            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
+            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder requestBodyBuilder = new StringBuilder();
             String line;
@@ -49,7 +49,6 @@ public class SendConnectionRequestHandler implements HttpHandler {
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
                 os.close();
-                return;
             } else {
                 String sender = senderUser.getEmail();
                 User receiverUser = dataBase.searchUserWithEmail(sendConnectionRequest.getReceiverEmail());

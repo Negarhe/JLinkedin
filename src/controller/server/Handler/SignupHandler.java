@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class SignupHandler implements HttpHandler {
     @Override
@@ -18,7 +19,7 @@ public class SignupHandler implements HttpHandler {
 
         // This is where you handle the /signup endpoint.
         // Read the request body
-        InputStreamReader isr = new InputStreamReader(t.getRequestBody(), "utf-8");
+        InputStreamReader isr = new InputStreamReader(t.getRequestBody(), StandardCharsets.UTF_8);
         BufferedReader br = new BufferedReader(isr);
         StringBuilder requestBodyBuilder = new StringBuilder();
         String line;

@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
 import model.User;
 
 public class ShowFollowersHandler implements HttpHandler {
@@ -17,7 +19,7 @@ public class ShowFollowersHandler implements HttpHandler {
         // This is where you handle the /showFollowers endpoint.
         // Read the request body
         try {
-            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
+            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder requestBodyBuilder = new StringBuilder();
             String line;

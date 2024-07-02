@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class showFeedHandler implements HttpHandler {
@@ -19,7 +20,7 @@ public class showFeedHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         try {
             //read the request body
-            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
+            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder requestBodyBuilder = new StringBuilder();
             String line;
@@ -40,7 +41,7 @@ public class showFeedHandler implements HttpHandler {
                 // If the user is found, get the user's feed
                 List<Post> feed = dataBase.getUserFeed(user);
                 response = gson.toJson(feed);
-                byte[] responseBytes = response.getBytes("UTF-8");
+                byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
                 //Send a response back to the client with the JSON string
                 exchange.sendResponseHeaders(200, responseBytes.length);
             } else {
@@ -49,7 +50,7 @@ public class showFeedHandler implements HttpHandler {
                 exchange.sendResponseHeaders(500, response.length());
             }
             OutputStream os = exchange.getResponseBody();
-            byte[] responseBytes = response.getBytes("UTF-8");
+            byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
             os.write(responseBytes);
             os.close();
         } catch (Exception e){

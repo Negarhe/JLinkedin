@@ -6,8 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -111,110 +109,6 @@ public class DataBase {
         return null;
     }
 
-    public void updateUserTitle(String email, String title) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users SET title = ? WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, title);
-            statement.setString(2, email);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUserAdditionalName(String email, String additionalName) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users SET additionalName = ? WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, additionalName);
-            statement.setString(2, email);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUserCity (String email, String city) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users SET city = ? WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, city);
-            statement.setString(2, email);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUserCountry(String email, String country) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users SET country = ? WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, country);
-            statement.setString(2, email);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUserContactInfo(String email, ContactInformation contactInfo) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "INSERT INTO contactInfo (email, phoneNumber, kind, address, birthday, relationshipStatus) VALUES (?, ?, ?, ?, ?, ?)";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, contactInfo.getEmail());
-            statement.setString(2, contactInfo.getPhoneNumber());
-            statement.setString(3, contactInfo.getKind().toString());
-            statement.setString(4, contactInfo.getAddress());
-            statement.setString(5, contactInfo.getBirthday());
-            statement.setString(6, contactInfo.getRelationshipStatus());
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-
-        }
-    }
-
-    public void updateUserProfession(String email, String profession) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users SET profession = ? WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, profession);
-            statement.setString(2, email);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void updateUserStatus(String email, String status) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users SET status = ? WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, status);
-            statement.setString(2, email);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public User searchUser(String fullName) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -591,7 +485,9 @@ public class DataBase {
 
                     for (Connect connect : connections) {
                         User user = searchUserWithEmail(connect.getReceiver());
-                        connectionRequests.add(user);
+                        if (connect.getStatus().equals(Connect.Status.PENDING)) {
+                            connectionRequests.add(user);
+                        }
                     }
                 }
             }
@@ -599,5 +495,81 @@ public class DataBase {
             e.printStackTrace();
         }
         return connectionRequests;
+    }
+
+    public void updateUserExperiences(String email, Job newExperience) {
+        //add newExperience to the user's experiences
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            // Get the current experiences of the user
+            String selectQuery = "SELECT experiences FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            // Parse the experiences from the JSON string
+            ArrayList<Job> experiences = new ArrayList<>();
+            if (resultSet.next()) {
+                String experiencesJson = resultSet.getString("experiences");
+                if (experiencesJson != null && !experiencesJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Job>>(){}.getType();
+                    experiences = gson.fromJson(experiencesJson, type);
+                }
+            }
+
+            // Add the new experience to the list
+            experiences.add(newExperience);
+
+            // Convert the experiences list back to a JSON string
+            Gson gson = new Gson();
+            String experiencesJson = gson.toJson(experiences);
+
+            // Update the experiences in the database
+            String updateQuery = "UPDATE users SET experiences = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, experiencesJson);
+            updateStatement.setString(2, email);
+            updateStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserEducations(String email, ArrayList<Education> newEducation) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            // Get the current educations of the user
+            String selectQuery = "SELECT educations FROM users WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, email);
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            // Parse the educations from the JSON string
+            ArrayList<Education> educations = new ArrayList<>();
+            if (resultSet.next()) {
+                String educationsJson = resultSet.getString("educations");
+                if (educationsJson != null && !educationsJson.isEmpty()) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Education>>(){}.getType();
+                    educations = gson.fromJson(educationsJson, type);
+                }
+            }
+
+            // Add the new education to the list
+            educations.addAll(newEducation);
+
+            // Convert the educations list back to a JSON string
+            Gson gson = new Gson();
+            String educationsJson = gson.toJson(educations);
+
+            // Update the educations in the database
+            String updateQuery = "UPDATE users SET educations = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, educationsJson);
+            updateStatement.setString(2, email);
+            updateStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
     }
 }
