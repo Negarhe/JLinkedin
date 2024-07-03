@@ -497,32 +497,22 @@ public class DataBase {
         return connectionRequests;
     }
 
-    public void updateUserExperiences(String email, Job newExperience) {
-        //add newExperience to the user's experiences
+    public void updateUserExperiences(String email, ArrayList<Job> newExperiences) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            // Get the current experiences of the user
+            //set the ArrayList to users' experiences
+//            String alterTableQuery = "ALTER TABLE users ADD experiences json";
+//            PreparedStatement selectStatement = conn.prepareStatement(alterTableQuery);
+//            selectStatement.execute();
             String selectQuery = "SELECT experiences FROM users WHERE email = ?";
-            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
-            selectStatement.setString(1, email);
-            ResultSet resultSet = selectStatement.executeQuery();
+            PreparedStatement select = conn.prepareStatement(selectQuery);
+            select.setString(1, email);
 
-            // Parse the experiences from the JSON string
-            ArrayList<Job> experiences = new ArrayList<>();
-            if (resultSet.next()) {
-                String experiencesJson = resultSet.getString("experiences");
-                if (experiencesJson != null && !experiencesJson.isEmpty()) {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Job>>(){}.getType();
-                    experiences = gson.fromJson(experiencesJson, type);
-                }
-            }
+            ResultSet resultSet = select.executeQuery();
 
-            // Add the new experience to the list
-            experiences.add(newExperience);
-
-            // Convert the experiences list back to a JSON string
+            // Convert the newExperiences list to a JSON string
             Gson gson = new Gson();
-            String experiencesJson = gson.toJson(experiences);
+            String experiencesJson = gson.toJson(newExperiences);
+
 
             // Update the experiences in the database
             String updateQuery = "UPDATE users SET experiences = ? WHERE email = ?";
@@ -530,7 +520,7 @@ public class DataBase {
             updateStatement.setString(1, experiencesJson);
             updateStatement.setString(2, email);
             updateStatement.executeUpdate();
-        } catch (SQLException e) {
+        }catch (SQLException e) {
             e.printStackTrace();
         }
     }

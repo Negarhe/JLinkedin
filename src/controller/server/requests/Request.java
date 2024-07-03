@@ -1,8 +1,8 @@
 package controller.server.requests;
 
 import model.Education;
+import model.Job;
 import model.Post;
-import model.User;
 
 public class Request {
     public static class SignupRequest {
@@ -69,7 +69,7 @@ public class Request {
 
     public static class ShowProfileRequest {
         private String email;
-        private String password;
+        private final String password;
 
         public ShowProfileRequest(String email, String password) {
             this.email = email;
@@ -78,10 +78,6 @@ public class Request {
 
         public String getPassword() {
             return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
         }
 
         public String getEmail() {
@@ -94,8 +90,8 @@ public class Request {
     }
 
     public static class FollowRequest {
-        private String sender;
-        private String receiver;
+        private final String sender;
+        private final String receiver;
 
         public FollowRequest(String sender, String receiver) {
             this.sender = sender;
@@ -106,17 +102,11 @@ public class Request {
             return sender;
         }
 
-        public void setSender(String sender) {
-            this.sender = sender;
-        }
 
         public String getReceiver() {
             return receiver;
         }
 
-        public void setReceiver(String receiver) {
-            this.receiver = receiver;
-        }
     }
 
     public static class ShowFollowersRequest {
@@ -153,7 +143,7 @@ public class Request {
 
     public static class createPost{
         private String email;
-        private Post post;
+        private final Post post;
 
         public createPost(String email, Post post) {
             this.email = email;
@@ -172,9 +162,6 @@ public class Request {
             return post;
         }
 
-        public void setPost(Post post) {
-            this.post = post;
-        }
     }
 
     public static class ShowFeedRequest{
@@ -194,9 +181,9 @@ public class Request {
     }
 
     public static class SendConnectionRequest {
-        private String senderEmail;
-        private String receiverEmail;
-        private String connectionNote;
+        private final String senderEmail;
+        private final String receiverEmail;
+        private final String connectionNote;
 
         public SendConnectionRequest(String senderEmail, String receiverEmail, String connectionNote) {
             this.senderEmail = senderEmail;
@@ -208,25 +195,14 @@ public class Request {
             return senderEmail;
         }
 
-        public void setSenderEmail(String senderEmail) {
-            this.senderEmail = senderEmail;
-        }
-
         public String getReceiverEmail() {
             return receiverEmail;
-        }
-
-        public void setReceiverEmail(String receiverEmail) {
-            this.receiverEmail = receiverEmail;
         }
 
         public String getConnectionNote() {
             return connectionNote;
         }
 
-        public void setConnectionNote(String connectionNote) {
-            this.connectionNote = connectionNote;
-        }
     }
 
 
@@ -247,10 +223,10 @@ public class Request {
     }
 
     public static class UpdateProfile {
-        private String partToEdit;
+        private final String partToEdit;
         private String email;
-        private String password;
-        private String newValue;
+        private final String password;
+        private final String newValue;
 
         public UpdateProfile(String email, String password, String partToEdit, String newValue) {
             this.email = email;
@@ -263,16 +239,8 @@ public class Request {
             return newValue;
         }
 
-        public void setNewValue(String newValue) {
-            this.newValue = newValue;
-        }
-
         public String getPartToEdit() {
             return partToEdit;
-        }
-
-        public void setPartToEdit(String partToEdit) {
-            this.partToEdit = partToEdit;
         }
 
         public String getEmail() {
@@ -287,14 +255,11 @@ public class Request {
             return password;
         }
 
-        public void setPassword(String password) {
-            this.password = password;
-        }
     }
 
     public static class UpdateEducations {
         private String email;
-        private String pass;
+        private final String pass;
         private Education education;
 
         public UpdateEducations(String email, String pass, Education education) {
@@ -315,16 +280,37 @@ public class Request {
             return pass;
         }
 
-        public void setPass(String pass) {
-            this.pass = pass;
-        }
-
         public Education getEducation() {
             return education;
         }
 
         public void setEducation(Education education) {
             this.education = education;
+        }
+    }
+
+    public static class UpdateExperience {
+        private final String email;
+        private final String pass;
+        private final Job experience;
+
+        public UpdateExperience(String email, String pass, Job experience) {
+            this.email = email;
+            this.pass = pass;
+            this.experience = experience;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPass() {
+            return pass;
+        }
+
+
+        public Job getExperience() {
+            return experience;
         }
     }
 }

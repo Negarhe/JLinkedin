@@ -31,6 +31,7 @@ public class Server {
         server.createContext("/showConnectionRequests", new ShowConnectionRequestsHandler());
         server.createContext("/updateProfile", new UpdateProfileHandler());
         server.createContext("/updateEducations", new UpdateEducationsHandler());
+        server.createContext("/updateExperiences", new UpdateExperiencesHandler());
 
         server.setExecutor(null); // creates a default executor
         server.start();
