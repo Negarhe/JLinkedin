@@ -5,6 +5,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,14 @@ public class DataBase {
                 statement.setString(3, user.getLastName());
                 statement.setString(4, user.getPassword());
 
+                //add user to contactinformation table
+                String query2 = "INSERT INTO contactinformation (email) VALUES (?)";
+
+                PreparedStatement statement2 = conn.prepareStatement(query2);
+                statement2.setString(1, user.getEmail());
+
                 statement.executeUpdate();
+                statement2.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -598,5 +607,85 @@ public class DataBase {
         }
 
         return null;
+    }
+
+    public void updateComments(String postId, String comment) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "INSERT INTO comment (postId, comment) VALUES (?, ?)";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, postId);
+            statement.setString(2, comment);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+    public void sendMessageToUser(String sender,String recipientId, String message) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "INSERT INTO message (sender, recipient, content, timestamp) VALUES (?, ?, ?,?)";
+
+            LocalTime time = LocalTime.now();
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, sender);
+            statement.setString(2, recipientId);
+            statement.setString(3, message);
+            statement.setString(4, time.toString());
+
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserContactInformation(User user, ContactInformation newContactInformation) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            // Get the current contact information of the user
+            String selectQuery = "SELECT * FROM contactinformation WHERE email = ?";
+            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+            selectStatement.setString(1, user.getEmail());
+            ResultSet resultSet = selectStatement.executeQuery();
+            
+
+            // Update the contact information in the database
+            String updateQuery = "UPDATE contactinformation SET phoneNumber = ? WHERE email = ?";
+            PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, newContactInformation.getPhoneNumber());
+            updateStatement.setString(2, user.getEmail());
+            updateStatement.executeUpdate();
+
+            updateQuery = "UPDATE contactinformation SET kind = ? WHERE email = ?";
+            updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, newContactInformation.getKind());
+            updateStatement.setString(2, user.getEmail());
+            updateStatement.executeUpdate();
+
+            updateQuery = "UPDATE contactinformation SET address = ? WHERE email = ?";
+            updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, newContactInformation.getAddress());
+            updateStatement.setString(2, user.getEmail());
+            updateStatement.executeUpdate();
+
+            updateQuery = "UPDATE contactinformation SET birthday = ? WHERE email = ?";
+            updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, newContactInformation.getBirthday());
+            updateStatement.setString(2, user.getEmail());
+            updateStatement.executeUpdate();
+
+            updateQuery = "UPDATE contactinformation SET relationshipStatus = ? WHERE email = ?";
+            updateStatement = conn.prepareStatement(updateQuery);
+            updateStatement.setString(1, newContactInformation.getRelationshipStatus());
+            updateStatement.setString(2, user.getEmail());
+            updateStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

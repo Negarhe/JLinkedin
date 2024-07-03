@@ -37,8 +37,13 @@ public class ContactInformation {
         this.phoneNumber = phoneNumber;
     }
 
-    public Kind getKind() {
-        return kind;
+    public String getKind() {
+        return kind.toString();
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
     public void setKind(Kind kind) {

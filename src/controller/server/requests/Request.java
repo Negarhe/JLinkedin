@@ -335,4 +335,88 @@ public class Request {
             return status;
         }
     }
+
+    public static class Comment{
+        private final String email;
+        private final String password;
+        private final String postId;
+        private final String comment;
+
+        public Comment(String email, String password, String postId, String comment) {
+            this.email = email;
+            this.password = password;
+            this.postId = postId;
+            this.comment = comment;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public String getPostId() {
+            return postId;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+    }
+
+    public static class Message{
+        private final String email;
+        private final String password;
+        private final String recipientId;
+        private final String message;
+
+        public Message(String email, String password, String recipientId, String message) {
+            this.email = email;
+            this.password = password;
+            this.recipientId = recipientId;
+            this.message = message;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public String getRecipientId() {
+            return recipientId;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+    public static class ContactInformation {
+        private final String email;
+        private final String password;
+        private final model.ContactInformation contactInformation;
+
+        public ContactInformation(String email, String password,model.ContactInformation contactInformation) {
+            this.email = email;
+            this.password = password;
+            this.contactInformation = contactInformation;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public model.ContactInformation getNewContactInformation() {
+            return contactInformation;
+        }
+    }
 }

@@ -1,12 +1,7 @@
 package model;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class User implements Serializable {
@@ -272,13 +267,12 @@ public class User implements Serializable {
 //        }
     }
 
-
-    public void createPost(String content, String imageUrl, String videoUrl, String caption) {
+    //    public void createPost(String content, String imageUrl, String videoUrl, String caption) {
 //        Post post = new Post(content, imageUrl, videoUrl, caption);
 //        this.getPosts().add(post);
 //        DataBase dataBase = new DataBase();
 //        dataBase.insertPost(this.getEmail(), post);
-    }
+//    }
 
 
     public ArrayList<Post> getPosts() {

@@ -33,6 +33,9 @@ public class Server {
         server.createContext("/updateEducations", new UpdateEducationsHandler());
         server.createContext("/updateExperiences", new UpdateExperiencesHandler());
         server.createContext("/updateStatus", new UpdateStatusHandler());
+        server.createContext("/updateContactInformation", new UpdateContactInformationHandler());
+        server.createContext("/message", new MessageHandler());
+        server.createContext("/comment", new CommentHandler());
 
         server.setExecutor(null); // creates a default executor
         server.start();
