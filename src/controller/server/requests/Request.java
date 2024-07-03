@@ -3,6 +3,7 @@ package controller.server.requests;
 import model.Education;
 import model.Job;
 import model.Post;
+import model.User;
 
 public class Request {
     public static class SignupRequest {
@@ -260,7 +261,7 @@ public class Request {
     public static class UpdateEducations {
         private String email;
         private final String pass;
-        private Education education;
+        private final Education education;
 
         public UpdateEducations(String email, String pass, Education education) {
             this.email = email;
@@ -284,9 +285,6 @@ public class Request {
             return education;
         }
 
-        public void setEducation(Education education) {
-            this.education = education;
-        }
     }
 
     public static class UpdateExperience {
@@ -311,6 +309,30 @@ public class Request {
 
         public Job getExperience() {
             return experience;
+        }
+    }
+
+    public static class UpdateStatus {
+        private final String email;
+        private final String pass;
+        private final User.Status status;
+
+        public UpdateStatus(String email, String pass, User.Status status) {
+            this.email = email;
+            this.pass = pass;
+            this.status = status;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPass() {
+            return pass;
+        }
+
+        public User.Status getStatus() {
+            return status;
         }
     }
 }

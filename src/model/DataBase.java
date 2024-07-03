@@ -566,4 +566,37 @@ public class DataBase {
 
         }
     }
+
+    public void updateStatus(String email, User.Status status) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users SET status = ? WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, status.toString());
+            statement.setString(2, email);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    public User.Status getStatus(String email) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT status FROM users WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return User.Status.valueOf(resultSet.getString("status"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
