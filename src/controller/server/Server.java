@@ -30,6 +30,7 @@ public class Server {
         server.createContext("/sendConnectionRequest", new SendConnectionRequestHandler());
         server.createContext("/showConnectionRequests", new ShowConnectionRequestsHandler());
         server.createContext("/updateProfile", new UpdateProfileHandler());
+        server.createContext("/updateEducations", new UpdateEducationsHandler());
 
         server.setExecutor(null); // creates a default executor
         server.start();

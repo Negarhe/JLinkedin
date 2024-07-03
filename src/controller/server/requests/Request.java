@@ -1,5 +1,6 @@
 package controller.server.requests;
 
+import model.Education;
 import model.Post;
 import model.User;
 
@@ -288,6 +289,42 @@ public class Request {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+    }
+
+    public static class UpdateEducations {
+        private String email;
+        private String pass;
+        private Education education;
+
+        public UpdateEducations(String email, String pass, Education education) {
+            this.email = email;
+            this.pass = pass;
+            this.education = education;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPass() {
+            return pass;
+        }
+
+        public void setPass(String pass) {
+            this.pass = pass;
+        }
+
+        public Education getEducation() {
+            return education;
+        }
+
+        public void setEducation(Education education) {
+            this.education = education;
         }
     }
 }

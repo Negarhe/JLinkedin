@@ -538,10 +538,14 @@ public class DataBase {
     public void updateUserEducations(String email, ArrayList<Education> newEducation) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             // Get the current educations of the user
+            String alterTableQuery = "ALTER TABLE users ADD educations json";
+            PreparedStatement selectStatement = conn.prepareStatement(alterTableQuery);
+            selectStatement.execute();
             String selectQuery = "SELECT educations FROM users WHERE email = ?";
-            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
-            selectStatement.setString(1, email);
-            ResultSet resultSet = selectStatement.executeQuery();
+            PreparedStatement select = conn.prepareStatement(selectQuery);
+            select.setString(1, email);
+
+            ResultSet resultSet = select.executeQuery();
 
             // Parse the educations from the JSON string
             ArrayList<Education> educations = new ArrayList<>();
