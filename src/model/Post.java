@@ -40,6 +40,8 @@ public class Post {
         this.videoUrl = post.getVideoUrl();
         this.caption = post.getCaption();
         this.timeStamp = new Date();//d is a date but timeStamp is a String
+        this.id = UUID.randomUUID().toString();
+
     }
 
 
