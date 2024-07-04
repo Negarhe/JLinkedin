@@ -2,6 +2,7 @@ package model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import controller.server.responses.Response;
 
 import java.lang.reflect.Type;
 import java.sql.*;
@@ -32,7 +33,7 @@ public class DataBase {
 
     public void insertUser(User user) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            if (!userExists(user.getEmail())){
+            if (!userExists(user.getEmail())) {
                 String query = "INSERT INTO users (email, name, lastName, password) VALUES (?, ?, ?, ?)";
 
                 PreparedStatement statement = conn.prepareStatement(query);
@@ -110,7 +111,8 @@ public class DataBase {
                 String postsJson = resultSet.getString("posts");
                 if (postsJson != null && !postsJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Post>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<Post>>() {
+                    }.getType();
                     posts = gson.fromJson(postsJson, type);
                 }
 
@@ -165,14 +167,15 @@ public class DataBase {
                 String postsJson = resultSet.getString("posts");
                 if (postsJson != null && !postsJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Post>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<Post>>() {
+                    }.getType();
                     posts = gson.fromJson(postsJson, type);
                 }
             }
 
             // Add the new post to the list
 
-            if (posts == null){
+            if (posts == null) {
                 posts = new ArrayList<>();
             }
             posts.add(post);
@@ -206,7 +209,8 @@ public class DataBase {
                 String followingJson = resultSet.getString("following");
                 if (followingJson != null && !followingJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<User>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<User>>() {
+                    }.getType();
                     followings = gson.fromJson(followingJson, type);
                 }
             }
@@ -229,7 +233,7 @@ public class DataBase {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Post post = new Post(resultSet.getString("text"), resultSet.getString("imageUrl"),
-                        resultSet.getString("videoUrl"),resultSet.getString("caption"));
+                        resultSet.getString("videoUrl"), resultSet.getString("caption"));
                 posts.add(post);
             }
         } catch (SQLException e) {
@@ -271,20 +275,20 @@ public class DataBase {
             ResultSet resultSet = selectStatement.executeQuery();
 
 
-
             // Parse the followers from the JSON string
             ArrayList<User> followers = new ArrayList<>();
             if (resultSet.next()) {
                 String followersJson = resultSet.getString("followers");
                 if (followersJson != null && !followersJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<User>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<User>>() {
+                    }.getType();
                     followers = gson.fromJson(followersJson, type);
                 }
             }
 
             for (User user : followers) {
-                if (user.getEmail().equals(follower.getEmail())){
+                if (user.getEmail().equals(follower.getEmail())) {
                     System.out.println("You are already following this user!");
                     return false;
                 }
@@ -325,7 +329,8 @@ public class DataBase {
                 String followingJson = resultSet.getString("following");
                 if (followingJson != null && !followingJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<User>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<User>>() {
+                    }.getType();
                     followings = gson.fromJson(followingJson, type);
                 }
             }
@@ -366,7 +371,6 @@ public class DataBase {
             statement.setString(1, message.getSender().toString());
             statement.setString(2, message.getRecipient().toString());
             statement.setString(3, message.getContent());
-
 
 
             statement.executeUpdate();
@@ -456,7 +460,8 @@ public class DataBase {
                 String connectionsJson = resultSet.getString("connection");
                 if (connectionsJson != null && !connectionsJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Connect>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<Connect>>() {
+                    }.getType();
                     connections = gson.fromJson(connectionsJson, type);
                 }
             }
@@ -499,7 +504,8 @@ public class DataBase {
                 String connectionJson = resultSet.getString("connection");
                 if (connectionJson != null && !connectionJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Connect>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<Connect>>() {
+                    }.getType();
                     ArrayList<Connect> connections = gson.fromJson(connectionJson, type);
 
                     for (Connect connect : connections) {
@@ -539,7 +545,7 @@ public class DataBase {
             updateStatement.setString(1, experiencesJson);
             updateStatement.setString(2, email);
             updateStatement.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -562,7 +568,8 @@ public class DataBase {
                 String educationsJson = resultSet.getString("educations");
                 if (educationsJson != null && !educationsJson.isEmpty()) {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Education>>(){}.getType();
+                    Type type = new TypeToken<ArrayList<Education>>() {
+                    }.getType();
                     educations = gson.fromJson(educationsJson, type);
                 }
             }
@@ -635,7 +642,7 @@ public class DataBase {
 
     }
 
-    public void sendMessageToUser(String sender,String recipientId, String message) {
+    public void sendMessageToUser(String sender, String recipientId, String message) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String query = "INSERT INTO message (sender, recipient, content, timestamp) VALUES (?, ?, ?,?)";
 
@@ -723,5 +730,52 @@ public class DataBase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Response.SearchPostResponse> searchPost(String requestBody) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM users";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            ResultSet resultSet = statement.executeQuery();
+            //parse the result into arrayList of user
+            ArrayList<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                User user = new User(resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("password"));
+
+                // convert post
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<Post>>() {
+                }.getType();
+                ArrayList<Post> posts = gson.fromJson(resultSet.getString("posts"), type);
+                user.setPosts(posts);
+                users.add(user);
+            }
+
+            ArrayList<Response.SearchPostResponse> searchPostResponses = new ArrayList<>();
+
+            // search for the post
+            for (User user : users) {
+                if (user.getPosts() == null) {
+                    continue;
+                }
+                for (Post post : user.getPosts()) {
+                    if (post.getText().toLowerCase().contains(requestBody.toLowerCase())) {
+                        Response.SearchPostResponse r = new Response.SearchPostResponse(user.getEmail(), user.getName(), post);
+                        searchPostResponses.add(r);
+                    }
+                }
+            }
+
+            return searchPostResponses;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

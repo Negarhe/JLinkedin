@@ -37,6 +37,7 @@ public class Server {
         server.createContext("/message", new MessageHandler());
         server.createContext("/comment", new CommentHandler());
         server.createContext("/like", new LikeHandler());
+        server.createContext("/searchPost", new SearchPostHandler());
 
         server.setExecutor(null); // creates a default executor
         server.start();

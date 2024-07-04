@@ -443,4 +443,16 @@ public class Request {
             return postId;
         }
     }
+
+    public static class SearchPostRequest {
+        private final String query;
+
+        public SearchPostRequest(String query) {
+            this.query = query;
+        }
+
+        public String getQuery() {
+            return query;
+        }
+    }
 }
