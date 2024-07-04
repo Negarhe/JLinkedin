@@ -79,6 +79,7 @@ public class User implements Serializable {
                 User user = new User(email, name, lastName, password);
                 DataBase dataBase = new DataBase();
                 dataBase.insertUser(user);
+                dataBase.updateContactInformationInUserTable();
                 return true;
             } else {
                 System.out.println("please choose a stronger password!");

@@ -419,4 +419,28 @@ public class Request {
             return contactInformation;
         }
     }
+
+    public static class Like {
+        private final String email;
+        private final String password;
+        private final String postId;
+
+        public Like(String email, String password, String postId) {
+            this.email = email;
+            this.password = password;
+            this.postId = postId;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public String getPostId() {
+            return postId;
+        }
+    }
 }

@@ -55,6 +55,16 @@ public class DataBase {
         }
     }
 
+    public void updateContactInformationInUserTable() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users u SET u.contactInformationId = (SELECT c.email FROM contactinformation c WHERE c.email = u.email)";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean userExists(String email) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String query = "SELECT * FROM users WHERE email = ?";
@@ -591,23 +601,23 @@ public class DataBase {
         }
     }
 
-    public User.Status getStatus(String email) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "SELECT status FROM users WHERE email = ?";
-
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, email);
-
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return User.Status.valueOf(resultSet.getString("status"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
+//    public User.Status getStatus(String email) {
+//        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+//            String query = "SELECT status FROM users WHERE email = ?";
+//
+//            PreparedStatement statement = conn.prepareStatement(query);
+//            statement.setString(1, email);
+//
+//            ResultSet resultSet = statement.executeQuery();
+//            if (resultSet.next()) {
+//                return User.Status.valueOf(resultSet.getString("status"));
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
     public void updateComments(String postId, String comment) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -651,7 +661,7 @@ public class DataBase {
             PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
             selectStatement.setString(1, user.getEmail());
             ResultSet resultSet = selectStatement.executeQuery();
-            
+
 
             // Update the contact information in the database
             String updateQuery = "UPDATE contactinformation SET phoneNumber = ? WHERE email = ?";
@@ -684,6 +694,32 @@ public class DataBase {
             updateStatement.setString(2, user.getEmail());
             updateStatement.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //create like table
+    public void createLikeTable() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "CREATE TABLE likes (postId VARCHAR(255))";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void likePost(String postId) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            createLikeTable();
+            String query = "INSERT INTO likes (postId) VALUES (?)";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, postId);
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

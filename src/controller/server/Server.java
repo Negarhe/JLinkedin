@@ -36,6 +36,7 @@ public class Server {
         server.createContext("/updateContactInformation", new UpdateContactInformationHandler());
         server.createContext("/message", new MessageHandler());
         server.createContext("/comment", new CommentHandler());
+        server.createContext("/like", new LikeHandler());
 
         server.setExecutor(null); // creates a default executor
         server.start();
