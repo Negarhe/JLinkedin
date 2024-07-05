@@ -2,6 +2,7 @@ package model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import controller.server.requests.Request;
 import controller.server.responses.Response;
 
 import java.lang.reflect.Type;
@@ -801,5 +802,30 @@ public class DataBase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Request.ContactInformation getUserContactInformation(User user) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "SELECT * FROM contactinformation WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, user.getEmail());
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Request.ContactInformation(user.getEmail(), user.getPassword(),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getString("address"),
+                        resultSet.getString("kind"),
+                        resultSet.getString("birthday"),
+                        resultSet.getString("relationshipStatus"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+
     }
 }

@@ -34,6 +34,7 @@ public class Server {
         server.createContext("/updateExperiences", new UpdateExperiencesHandler());
         server.createContext("/updateStatus", new UpdateStatusHandler());
         server.createContext("/updateContactInformation", new UpdateContactInformationHandler());
+        server.createContext("/showContactInformation", new ShowContactInformationHandler());
         server.createContext("/message", new MessageHandler());
         server.createContext("/comment", new CommentHandler());
         server.createContext("/like", new LikeHandler());

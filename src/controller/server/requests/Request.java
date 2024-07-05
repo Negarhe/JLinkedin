@@ -428,6 +428,12 @@ public class Request {
             this.contactInformation = contactInformation;
         }
 
+        public ContactInformation(String email, String password, String phoneNumber, String address, String kind, String birthday, String relationshipStatus) {
+            this.email = email;
+            this.password = password;
+            this.contactInformation = new model.ContactInformation(email, phoneNumber, model.ContactInformation.Kind.valueOf(kind), address, birthday, relationshipStatus);
+        }
+
         public String getEmail() {
             return email;
         }
@@ -474,6 +480,18 @@ public class Request {
 
         public String getQuery() {
             return query;
+        }
+    }
+
+    public static class ShowContactInformationRequest{
+        private final String email;
+
+        public ShowContactInformationRequest(String email){
+            this.email = email;
+        }
+
+        public String getEmail(){
+            return email;
         }
     }
 }
