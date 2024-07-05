@@ -422,7 +422,7 @@ public class Request {
         private final String password;
         private final model.ContactInformation contactInformation;
 
-        public ContactInformation(String email, String password,model.ContactInformation contactInformation) {
+        public ContactInformation(String email, String password, model.ContactInformation contactInformation) {
             this.email = email;
             this.password = password;
             this.contactInformation = contactInformation;

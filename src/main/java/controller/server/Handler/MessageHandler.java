@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import controller.server.requests.Request;
-import model.DataBase;
 import model.User;
+import model.DataBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;

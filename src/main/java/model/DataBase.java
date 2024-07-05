@@ -7,7 +7,6 @@ import controller.server.responses.Response;
 
 import java.lang.reflect.Type;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +42,8 @@ public class DataBase {
                 statement.setString(3, user.getLastName());
                 statement.setString(4, user.getPassword());
 
-                //add user to contactinformation table
-                String query2 = "INSERT INTO contactinformation (email) VALUES (?)";
+                //add user to ContactInformation table
+                String query2 = "INSERT INTO ContactInformation (email) VALUES (?)";
 
                 PreparedStatement statement2 = conn.prepareStatement(query2);
                 statement2.setString(1, user.getEmail());
@@ -59,7 +58,7 @@ public class DataBase {
 
     public void updateContactInformationInUserTable() {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String query = "UPDATE users u SET u.contactInformationId = (SELECT c.email FROM contactinformation c WHERE c.email = u.email)";
+            String query = "UPDATE users u SET u.contactInformationId = (SELECT c.email FROM ContactInformation c WHERE c.email = u.email)";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -669,38 +668,38 @@ public class DataBase {
     public void updateUserContactInformation(User user, ContactInformation newContactInformation) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             // Get the current contact information of the user
-            String selectQuery = "SELECT * FROM contactinformation WHERE email = ?";
+            String selectQuery = "SELECT * FROM ContactInformation WHERE email = ?";
             PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
             selectStatement.setString(1, user.getEmail());
             ResultSet resultSet = selectStatement.executeQuery();
 
 
             // Update the contact information in the database
-            String updateQuery = "UPDATE contactinformation SET phoneNumber = ? WHERE email = ?";
+            String updateQuery = "UPDATE ContactInformation SET phoneNumber = ? WHERE email = ?";
             PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
             updateStatement.setString(1, newContactInformation.getPhoneNumber());
             updateStatement.setString(2, user.getEmail());
             updateStatement.executeUpdate();
 
-            updateQuery = "UPDATE contactinformation SET kind = ? WHERE email = ?";
+            updateQuery = "UPDATE ContactInformation SET kind = ? WHERE email = ?";
             updateStatement = conn.prepareStatement(updateQuery);
             updateStatement.setString(1, newContactInformation.getKind());
             updateStatement.setString(2, user.getEmail());
             updateStatement.executeUpdate();
 
-            updateQuery = "UPDATE contactinformation SET address = ? WHERE email = ?";
+            updateQuery = "UPDATE ContactInformation SET address = ? WHERE email = ?";
             updateStatement = conn.prepareStatement(updateQuery);
             updateStatement.setString(1, newContactInformation.getAddress());
             updateStatement.setString(2, user.getEmail());
             updateStatement.executeUpdate();
 
-            updateQuery = "UPDATE contactinformation SET birthday = ? WHERE email = ?";
+            updateQuery = "UPDATE ContactInformation SET birthday = ? WHERE email = ?";
             updateStatement = conn.prepareStatement(updateQuery);
             updateStatement.setString(1, newContactInformation.getBirthday());
             updateStatement.setString(2, user.getEmail());
             updateStatement.executeUpdate();
 
-            updateQuery = "UPDATE contactinformation SET relationshipStatus = ? WHERE email = ?";
+            updateQuery = "UPDATE ContactInformation SET relationshipStatus = ? WHERE email = ?";
             updateStatement = conn.prepareStatement(updateQuery);
             updateStatement.setString(1, newContactInformation.getRelationshipStatus());
             updateStatement.setString(2, user.getEmail());

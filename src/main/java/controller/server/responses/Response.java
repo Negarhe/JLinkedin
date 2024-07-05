@@ -1,9 +1,6 @@
 package controller.server.responses;
 
-import model.Education;
-import model.Job;
 import model.Post;
-import model.User;
 
 public class Response {
     public static class SearchPostResponse {
