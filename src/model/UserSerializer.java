@@ -19,11 +19,11 @@ public class UserSerializer implements JsonSerializer<User> {
         jsonObject.addProperty("additionalName", user.getAdditionalName());
         jsonObject.addProperty("city", user.getCity());
         jsonObject.addProperty("country", user.getCountry());
-        jsonObject.addProperty("contactInfo", user.getContactInfo().toString());
-        jsonObject.addProperty("profilePhoto", user.getProfilePhoto());
-        jsonObject.addProperty("backgroundPhoto", user.getBackgroundPhoto());
-        jsonObject.addProperty("profession", user.getProfession());
-        jsonObject.addProperty("status", user.getStatus().toString());
+//        jsonObject.addProperty("contactInfo", user.getContactInfo().toString());
+//        jsonObject.addProperty("profilePhoto", user.getProfilePhoto());
+//        jsonObject.addProperty("backgroundPhoto", user.getBackgroundPhoto());
+//        jsonObject.addProperty("profession", user.getProfession());
+//        jsonObject.addProperty("status", user.getStatus().toString());
 
 
 

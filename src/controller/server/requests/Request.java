@@ -223,37 +223,58 @@ public class Request {
         }
     }
 
-    public static class UpdateProfile {
-        private final String partToEdit;
-        private String email;
-        private final String password;
-        private final String newValue;
+    public static class EditProfileRequest{
+        public final String email;
+        public final String name;
+        public final String lastName;
+        public final String additionalName;
+        public final String title;
+        public final String country;
 
-        public UpdateProfile(String email, String password, String partToEdit, String newValue) {
+        public final String city;
+
+        public final String profileImageAddress;
+        public EditProfileRequest(String email, String name, String lastName, String additionalName, String title, String profileImageAddress,
+                                  String country, String city){
             this.email = email;
-            this.password = password;
-            this.partToEdit = partToEdit;
-            this.newValue = newValue;
-        }
-
-        public String getNewValue() {
-            return newValue;
-        }
-
-        public String getPartToEdit() {
-            return partToEdit;
+            this.name = name;
+            this.lastName = lastName;
+            this.additionalName = additionalName;
+            this.title = title;
+            this.country = country;
+            this.city = city;
+            this.profileImageAddress = profileImageAddress;
         }
 
         public String getEmail() {
             return email;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
+        public String getName() {
+            return name;
         }
 
-        public String getPassword() {
-            return password;
+        public String getLastName() {
+            return lastName;
+        }
+        public String getAdditionalName() {
+            return additionalName;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getProfileImageAddress() {
+            return profileImageAddress;
         }
 
     }

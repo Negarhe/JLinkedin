@@ -256,7 +256,11 @@ public class DataBase {
                 return new User(resultSet.getString("email"),
                         resultSet.getString("name"),
                         resultSet.getString("lastName"),
-                        resultSet.getString("password"));
+                        resultSet.getString("password"),
+                        resultSet.getString("title"),
+                        resultSet.getString("additionalName"),
+                        resultSet.getString("city"),
+                        resultSet.getString("country"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -777,5 +781,25 @@ public class DataBase {
         }
 
         return null;
+    }
+
+    public void updateUser(User user) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String query = "UPDATE users SET name = ?, lastName = ?, additionalName = ?, title = ?, country = ?, city = ? WHERE email = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getLastName());
+            statement.setString(3, user.getAdditionalName());
+            statement.setString(4, user.getTitle());
+            statement.setString(5, user.getCountry());
+            statement.setString(6, user.getCity());
+            statement.setString(7, user.getEmail());
+
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

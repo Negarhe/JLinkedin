@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AP-project.iml" filepath="$PROJECT_DIR$/AP-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JLinkedin.iml" filepath="$PROJECT_DIR$/JLinkedin.iml" />
     </modules>
   </component>
 </project>

@@ -13,7 +13,7 @@ import java.util.HashSet;
 
 public class Server {
 
-    public static HashSet<Connect> connects = new HashSet<>();
+    public static HashSet<model.Connect> connects = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress(8085), 0);

@@ -66,6 +66,17 @@ public class User implements Serializable {
             System.out.println("Invalid email");
     }
 
+    public User(String email, String name, String lastName, String password,String title, String additionalName, String city, String country) {
+        this.title = title;
+        this.email = email;
+        this.name = name;
+        this.lastName = lastName;
+        this.password = password;
+        this.additionalName = additionalName;
+        this.city = city;
+        this.country = country;
+    }
+
     //format checking methods, also we can use try-catch blocks
 
     public boolean emailValidityCheck(String email) {

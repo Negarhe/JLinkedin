@@ -29,7 +29,7 @@ public  class ShowProfileHandler implements HttpHandler {
             requestBodyBuilder.append(line);
         }
         String requestBody = requestBodyBuilder.toString();
-
+        System.out.println(requestBody);
 
         JsonParser parser = new JsonParser();
         try {
