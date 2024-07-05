@@ -1,6 +1,5 @@
 package controller.server.Handler;
 
-import util.MockHttpExchange;
 import model.DataBase;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
