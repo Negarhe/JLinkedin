@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import controller.server.requests.Request;
-import model.DataBase;
 import model.User;
+import model.DataBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,7 +33,12 @@ public class LoginHandler implements HttpHandler {
         Request.LoginRequest loginRequest = gson.fromJson(requestBody, Request.LoginRequest.class);
         DataBase db = new DataBase();
         User user = db.searchUserInDataBase(loginRequest.getEmail(), loginRequest.getPassword());
-        boolean success = user.logIn();
+        boolean success;
+        if (user == null){
+            success = false;
+        } else {
+            success = user.logIn();
+        }
 
         String response;
         if (success){

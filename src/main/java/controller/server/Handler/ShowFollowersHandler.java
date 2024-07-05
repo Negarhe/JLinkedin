@@ -2,16 +2,15 @@ package controller.server.Handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import model.DataBase;
+import model.User;
 import controller.server.requests.Request;
+import model.DataBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-
-import model.User;
 
 public class ShowFollowersHandler implements HttpHandler {
     @Override
